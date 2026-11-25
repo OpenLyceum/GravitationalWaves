@@ -1,6 +1,6 @@
 # Credits — Gravitational Waves
 
-Watch a gravitational wave stretch space, measure it with a laser interferometer, and dig a black-hole chirp out of detector noise.
+Watch a gravitational wave stretch space, measure it with a laser interferometer, dig a black-hole chirp out of detector noise, and locate the source on the sky with a detector network.
 
 ## Data
 
@@ -12,6 +12,9 @@ Watch a gravitational wave stretch space, measure it with a laser interferometer
   an amplitude spectral density estimated from the H1 data around GW150914.
 - Event parameters (source-frame masses, luminosity distance, redshift, network SNR) are from the GWTC-1, GWTC-2.1 and
   GWTC-3 catalog releases as served by the GWOSC event API.
+- **Network screen presets**: per-detector SNRs and sky positions from the GW170814 and GW170817 discovery papers
+  (Phys. Rev. Lett. 119, 141101 and 161101); detector sites and arm orientations from LALSuite (`LALDetectors.h`).
+- **Coastlines**: [Natural Earth](https://www.naturalearthdata.com) 1:110m coastline, public domain.
 
 ## License
 

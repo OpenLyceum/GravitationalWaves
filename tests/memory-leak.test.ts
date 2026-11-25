@@ -27,6 +27,12 @@ import { InterferometerControlPanel } from "../src/interferometer/view/Interfero
 import { InterferometerScreenSummaryContent } from "../src/interferometer/view/InterferometerScreenSummaryContent.js";
 import { MichelsonNode } from "../src/interferometer/view/MichelsonNode.js";
 import { SensitivityChartNode } from "../src/interferometer/view/SensitivityChartNode.js";
+import { NetworkModel } from "../src/network/model/NetworkModel.js";
+import { ArrivalTracesNode } from "../src/network/view/ArrivalTracesNode.js";
+import { NetworkControlPanel } from "../src/network/view/NetworkControlPanel.js";
+import { NetworkReadoutsPanel } from "../src/network/view/NetworkReadoutsPanel.js";
+import { NetworkScreenSummaryContent } from "../src/network/view/NetworkScreenSummaryContent.js";
+import { SkyMapNode } from "../src/network/view/SkyMapNode.js";
 import { WavesModel } from "../src/waves/model/WavesModel.js";
 import { RealScalePanel } from "../src/waves/view/RealScalePanel.js";
 import { TestMassRingNode } from "../src/waves/view/TestMassRingNode.js";
@@ -36,6 +42,7 @@ import { describeDisposalLeaks } from "./helpers/memoryLeak.js";
 const wavesModel = new WavesModel();
 const interferometerModel = new InterferometerModel();
 const chirpModel = new ChirpModel();
+const networkModel = new NetworkModel();
 const chirpAudioViewNode = new Node();
 const chirpListParent = new Node();
 const chirpAudioPlayer = new ChirpAudioPlayer(chirpModel, chirpAudioViewNode);
@@ -110,6 +117,32 @@ describeDisposalLeaks([
     create: () => new SpectrogramNode(chirpModel, 420, 220),
     keepAlive: () => [chirpModel],
   },
+  { name: "NetworkModel", create: () => new NetworkModel() },
+  {
+    name: "SkyMapNode",
+    create: () => new SkyMapNode(networkModel),
+    keepAlive: () => [networkModel],
+  },
+  {
+    name: "ArrivalTracesNode",
+    create: () => new ArrivalTracesNode(networkModel),
+    keepAlive: () => [networkModel],
+  },
+  {
+    name: "NetworkControlPanel",
+    create: () => new NetworkControlPanel(networkModel),
+    keepAlive: () => [networkModel],
+  },
+  {
+    name: "NetworkReadoutsPanel",
+    create: () => new NetworkReadoutsPanel(networkModel),
+    keepAlive: () => [networkModel],
+  },
+  {
+    name: "NetworkScreenSummaryContent",
+    create: () => new NetworkScreenSummaryContent(networkModel),
+    keepAlive: () => [networkModel],
+  },
 ]);
 
 describe("composed TimeModel disposal", () => {
@@ -128,6 +161,12 @@ describe("composed TimeModel disposal", () => {
     }
     {
       const model = new ChirpModel();
+      const spy = vi.spyOn(model.timer, "dispose");
+      model.dispose();
+      expect(spy).toHaveBeenCalledOnce();
+    }
+    {
+      const model = new NetworkModel();
       const spy = vi.spyOn(model.timer, "dispose");
       model.dispose();
       expect(spy).toHaveBeenCalledOnce();

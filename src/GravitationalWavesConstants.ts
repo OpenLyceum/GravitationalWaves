@@ -45,6 +45,27 @@ export const CHIRP_READOUTS_WIDTH = 280;
 /** Chirp matched-filter panel width (fits 260×110 SNR chart). */
 export const CHIRP_MATCHED_WIDTH = 300;
 
+/** Network control / readouts panel width (right column; never scale below 1). */
+export const NETWORK_PANEL_WIDTH = 340;
+
+/** Sky-map plot size (2:1 equirectangular). */
+export const NETWORK_MAP_WIDTH = 600;
+export const NETWORK_MAP_HEIGHT = 280;
+
+/** Arrival-traces plot size. */
+export const NETWORK_TRACES_WIDTH = 600;
+export const NETWORK_TRACES_HEIGHT = 250;
+
+/** Keyboard nudge for the true-source star (degrees per arrow key). */
+export const NETWORK_SOURCE_DRAG_DELTA_DEG = 1;
+export const NETWORK_SOURCE_SHIFT_DRAG_DELTA_DEG = 0.2;
+
+/** Detector-marker flash duration as a fraction of the trace window. */
+export const NETWORK_ARRIVAL_FLASH_FRACTION = 0.1;
+
+/** Fraction of full sky at which the 90 % area is described as “whole sky”. */
+export const NETWORK_WHOLE_SKY_FRACTION = 0.89;
+
 /** Font size for body labels. */
 export const LABEL_FONT_SIZE = 14;
 

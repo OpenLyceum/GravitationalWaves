@@ -4,11 +4,12 @@ Sim-specific context for AI assistants. General SceneryStack guidance: [OpenLyce
 
 ## Project
 
-Gravitational Waves (`gravitational-waves`) is a SceneryStack simulation with three screens:
+Gravitational Waves (`gravitational-waves`) is a SceneryStack simulation with four screens:
 
 - **Waves** — test-mass ring under + / × strain.
 - **Interferometer** — Michelson response, antenna pattern, toy noise ASD.
 - **Chirp** — Newtonian inspiral + phenomenological ringdown, matched filtering, real GWOSC events.
+- **Network** — detector sites, arrival delays, face-on antenna response, triangulation sky map, real-event presets.
 
 Physics and data provenance: [`doc/model.md`](doc/model.md). Architecture: [`doc/implementation-notes.md`](doc/implementation-notes.md).
 
@@ -31,6 +32,8 @@ Physics and data provenance: [`doc/model.md`](doc/model.md). Architecture: [`doc
 | `src/common/model/Chirp.ts` | Inspiral + merger/ringdown waveform |
 | `src/common/model/MatchedFilter.ts` | SPA amplitude, optimal SNR, match, SNR scan |
 | `src/common/model/whiten.ts` | Whitened strain approx. and seeded noise |
+| `src/common/model/DetectorNetwork.ts` | Detector sites (LALSuite), arrival delays, network antenna pattern, GMST |
+| `src/common/model/SkyLocalization.ts` | Timing + amplitude sky posterior, credible areas, delay rings |
 | `src/common/data/dataTypes.ts` | Catalog / strain TypeScript shapes |
 | `src/common/data/eventLibrary.ts` | `catalogEvents`, `loadEvent`, `detectorFrameMasses` |
 | `src/common/data/generated/` | **Generated — do not edit.** Owned by `npm run build-data` |
@@ -43,9 +46,14 @@ Physics and data provenance: [`doc/model.md`](doc/model.md). Architecture: [`doc
 | `src/chirp/ChirpScreen.ts` | Screen wrapper |
 | `src/chirp/model/ChirpModel.ts` | Simulation state and logic |
 | `src/chirp/view/ChirpScreenView.ts` | Visual nodes, layout, a11y wiring |
+| `src/network/NetworkScreen.ts` | Screen wrapper |
+| `src/network/model/NetworkModel.ts` | Source, enabled detectors, readings, sky map, traces |
+| `src/network/model/networkPresets.ts` | GW150914 / GW170814 / GW170817 network presets |
+| `src/network/view/NetworkScreenView.ts` | Sky map, arrival traces, controls, readouts |
 | `scripts/build-data.ts` | Downloads GWOSC strain and emits generated modules |
 | `scripts/data/events.json` | Hand-edited event list (parameters + H1 URLs) |
 | `scripts/data/{dsp,buildEvent,fetchCache,emit}.ts` | FFT/Welch/whiten, per-event build, cache, emit |
+| `scripts/data/coastlines.ts` | Natural Earth 110m coastlines (public domain), thinned for the Network map |
 
 ## Data
 
@@ -65,6 +73,10 @@ Physics and data provenance: [`doc/model.md`](doc/model.md). Architecture: [`doc
   Keep `tests/matchedFilter.test.ts` "full-range scan peaks at the true chirp mass" passing.
 - Model SNRs use `ORIENTATION_FACTOR = 0.4` (rms sky/orientation average); the toy noise is more sensitive than O1,
   so model SNRs for presets run above the catalog values by design.
+- Network sky positions are Earth-fixed (lon, lat beneath the source). Presets convert RA with `subSourceLongitude(ra, gps)`.
+  `EFFECTIVE_BANDWIDTH = 100 Hz` is calibrated so GW170817 / GW170814 / GW150914 areas land near the published values;
+  keep `tests/network.test.ts` passing if you change it. `GW150914_MEASURED_DELAY` is re-measured from the bundled strain
+  in `tests/networkModel.test.ts`.
 
 ## Compliance carve-outs
 

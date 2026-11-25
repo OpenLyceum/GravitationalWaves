@@ -3,7 +3,8 @@
   "screens": {
     "waves": "Ondes",
     "interferometer": "Interféromètre",
-    "chirp": "Chirp"
+    "chirp": "Chirp",
+    "network": "Réseau"
   },
   "waves": {
     "polarization": "Polarisation",
@@ -190,9 +191,94 @@
         "timeControl": "Lecture, pause et pas à pas",
         "resetAll": "Tout réinitialiser"
       }
+    },
+    "network": {
+      "screenSummary": {
+        "playArea": "Une carte du monde montre d’où vient l’onde gravitationnelle, avec les sites des détecteurs, les anneaux à délai égal et une région crédible à 90 %. Les traces d’arrivée en dessous montrent la même onde à chaque détecteur.",
+        "controlArea": "Les commandes choisissent un événement du catalogue ou une source personnalisée, activent les détecteurs, règlent le SNR du réseau et le bruit de mesure, affichent les anneaux et la position vraie, rejouent les arrivées et Tout réinitialiser.",
+        "interactionHint": "Activez ou désactivez des détecteurs, faites glisser la source vraie sur la carte, ou choisissez un événement réel pour voir la région du ciel se réduire."
+      },
+      "currentDetails": "Détecteurs {{detectors}}, aire à 90 % {{area}} deg², délais {{delays}}, position vraie {{inside}} la région à 90 %.",
+      "insideRegion": "à l’intérieur de",
+      "outsideRegion": "à l’extérieur de",
+      "unknownRegion": "inconnue par rapport à",
+      "noDelays": "aucun",
+      "controls": {
+        "source": "Source du signal",
+        "detectorH1": "Activer LIGO Hanford",
+        "detectorL1": "Activer LIGO Livingston",
+        "detectorV1": "Activer Virgo",
+        "detectorK1": "Activer KAGRA",
+        "networkSnr": "Rapport signal sur bruit du réseau",
+        "measurementNoise": "Ajouter du bruit de mesure",
+        "newNoise": "Tirer une nouvelle réalisation de bruit",
+        "showRings": "Afficher les anneaux à délai égal",
+        "showTruth": "Afficher la position vraie de la source",
+        "sourcePosition": "Position de la source",
+        "timeControl": "Lecture, pause et pas à pas",
+        "resetAll": "Tout réinitialiser"
+      }
     }
   },
   "preferences": {
     "title": "Simulation"
+  },
+  "network": {
+    "mapTitle": "D’où vient l’onde ?",
+    "mapCaption": "La carte montre le point de la Terre juste sous la source",
+    "oneDetectorNote": "Un seul détecteur ne peut pas indiquer la direction",
+    "noDetectorNote": "Activez au moins deux détecteurs",
+    "legendTrue": "★ position vraie",
+    "legendPeak": "+ meilleure estimée",
+    "legendRegion": "zone ombrée = région à 90 %",
+    "legendRing": "tirets = anneau à délai égal",
+    "tracesTitle": "Traces d’arrivée",
+    "tracesCaption": "La même onde, des temps d’arrivée et des amplitudes différents",
+    "tracesXAxis": "temps relatif à l’arrivée au centre de la Terre (ms)",
+    "arrivalMs": "{{sign}}{{value}} ms",
+    "measuredDelayNote": "Mesuré à partir des données GWOSC : H1 l’a entendue {{delay}} ms après L1, inversée",
+    "controlsTitle": "Commandes",
+    "source": "Source",
+    "customSource": "Source personnalisée",
+    "presetGW150914": "GW150914 (2 détecteurs)",
+    "presetGW170814": "GW170814 (première avec Virgo)",
+    "presetGW170817": "GW170817 (étoiles à neutrons)",
+    "presetInfo": "{{date}} · {{detectors}}",
+    "detectorH1": "H1 · LIGO Hanford",
+    "detectorL1": "L1 · LIGO Livingston",
+    "detectorV1": "V1 · Virgo",
+    "detectorK1": "K1 · KAGRA",
+    "detectorShortH1": "H1 Hanford",
+    "detectorShortL1": "L1 Livingston",
+    "detectorShortV1": "V1 Virgo",
+    "detectorShortK1": "K1 KAGRA",
+    "networkSnr": "SNR du réseau",
+    "snrPattern": "{{value}}",
+    "measurementNoise": "Bruit de mesure",
+    "newNoise": "Nouveau bruit",
+    "showRings": "Afficher les anneaux de délai",
+    "showTruth": "Afficher la position vraie",
+    "readoutsTitle": "Lectures",
+    "headerDetector": "Dét",
+    "headerArrival": "t (ms)",
+    "headerResponse": "R",
+    "headerSnr": "SNR",
+    "headerSigma": "±σₜ",
+    "pairDelay": "{{a}} − {{b}} : {{delay}} ms (max ±{{max}} ms)",
+    "area90": "Région 90 % : {{area}} deg² (≈ {{moons}} pleines Lunes)",
+    "area90WholeSky": "Région 90 % : ciel entier",
+    "publishedArea": "publié : {{area}} deg²",
+    "pointingError": "La meilleure estimée est à {{error}}° de la source",
+    "ringOnlyNote": "Deux détecteurs : la source peut se trouver n’importe où sur l’anneau",
+    "emDash": "—",
+    "slowMotion": "Ralenti {{factor}}×",
+    "sourcePositionValue": "longitude {{lon}}, latitude {{lat}}",
+    "lonEast": "{{value}}° E",
+    "lonWest": "{{value}}° O",
+    "latNorth": "{{value}}° N",
+    "latSouth": "{{value}}° S",
+    "ringLabel": "{{a}}–{{b}}",
+    "responseValue": "{{value}}",
+    "timingErrorValue": "±{{value}}"
   }
 }

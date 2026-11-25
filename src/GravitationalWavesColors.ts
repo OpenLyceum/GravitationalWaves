@@ -299,6 +299,98 @@ const GravitationalWavesColors = {
     default: "#ffeb3b",
     projector: "#f57f17",
   }),
+
+  // ── Network screen (Okabe–Ito detector colours) ──────────────────────────────
+
+  /** LIGO Hanford (H1) — orange. */
+  networkH1ColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "networkH1", {
+    default: "#E69F00",
+    projector: "#B37400",
+  }),
+
+  /** LIGO Livingston (L1) — sky blue. */
+  networkL1ColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "networkL1", {
+    default: "#56B4E9",
+    projector: "#0072B2",
+  }),
+
+  /** Virgo (V1) — bluish green. */
+  networkV1ColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "networkV1", {
+    default: "#009E73",
+    projector: "#006B4F",
+  }),
+
+  /** KAGRA (K1) — vermillion. */
+  networkK1ColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "networkK1", {
+    default: "#D55E00",
+    projector: "#A04600",
+  }),
+
+  /** Disabled / hollow detector marker. */
+  networkDetectorOffColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "networkDetectorOff", {
+    default: "#78909c",
+    projector: "#90a4ae",
+  }),
+
+  /** Ocean fill under the sky map. */
+  networkOceanColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "networkOcean", {
+    default: "#0d2137",
+    projector: "#bbdefb",
+  }),
+
+  /** Coastline strokes. */
+  networkCoastColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "networkCoast", {
+    default: "#5c7a8a",
+    projector: "#546e7a",
+  }),
+
+  /** Lat/lon grid on the sky map. */
+  networkGridColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "networkGrid", {
+    default: "rgba(144,164,174,0.35)",
+    projector: "rgba(84,110,122,0.35)",
+  }),
+
+  /** Posterior heat-map warm colour (alpha varies with density). */
+  networkHeatColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "networkHeat", {
+    default: "#ff8a65",
+    projector: "#e64a19",
+  }),
+
+  /** Stronger fill for the 90 % credible region. */
+  networkHeat90ColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "networkHeat90", {
+    default: "#ffcc80",
+    projector: "#ef6c00",
+  }),
+
+  /** Equal-delay ring stroke. */
+  networkRingColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "networkRing", {
+    default: "#ce93d8",
+    projector: "#8e24aa",
+  }),
+
+  /** True-source star. */
+  networkTruthColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "networkTruth", {
+    default: "#ffeb3b",
+    projector: "#f9a825",
+  }),
+
+  /** Most-probable-direction “+” marker. */
+  networkPeakColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "networkPeak", {
+    default: "#ffffff",
+    projector: "#212121",
+  }),
+
+  /** Arrival-trace playhead. */
+  networkPlayheadColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "networkPlayhead", {
+    default: "#ffffff",
+    projector: "#212121",
+  }),
+
+  /** Detector arrival flash / glow. */
+  networkFlashColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "networkFlash", {
+    default: "rgba(255,235,59,0.55)",
+    projector: "rgba(249,168,37,0.45)",
+  }),
 };
 
 export default GravitationalWavesColors;

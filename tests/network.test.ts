@@ -9,7 +9,14 @@ import {
   networkAntennaPattern,
   subSourceLongitude,
 } from "../src/common/model/DetectorNetwork.js";
-import { delayRing, FULL_SKY_DEG2, localize, timingError } from "../src/common/model/SkyLocalization.js";
+import {
+  cellCentre,
+  delayRing,
+  densityAt,
+  FULL_SKY_DEG2,
+  localize,
+  timingError,
+} from "../src/common/model/SkyLocalization.js";
 
 const DEG = Math.PI / 180;
 const H1 = detectorGeometry(DETECTOR_SITES.H1);
@@ -118,5 +125,12 @@ describe("sky localization", () => {
       expect((arrivalDelay(H1, lon, lat) - arrivalDelay(L1, lon, lat)) * 1e3).toBeCloseTo(dt * 1e3, 6);
     }
     expect(delayRing(H1, L1, 12e-3)).toEqual([]);
+  });
+
+  it("densityAt samples the cell that contains the direction", () => {
+    const map = localize(observe(40 * DEG, 20 * DEG, { H1: 15, L1: 15 }));
+    const { lon, lat } = cellCentre(220, 70); // ≈ lon −39.5°, lat 19.5°
+    expect(densityAt(map, lon, lat)).toBe(map.density[70 * 360 + 220]);
+    expect(densityAt({ ...map, density: new Float64Array(0) }, 0, 0)).toBe(0);
   });
 });

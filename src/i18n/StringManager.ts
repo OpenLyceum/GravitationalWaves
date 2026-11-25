@@ -80,11 +80,13 @@ export class StringManager {
     readonly wavesStringProperty: ReadOnlyProperty<string>;
     readonly interferometerStringProperty: ReadOnlyProperty<string>;
     readonly chirpStringProperty: ReadOnlyProperty<string>;
+    readonly networkStringProperty: ReadOnlyProperty<string>;
   } {
     return {
       wavesStringProperty: stringProperties.screens.wavesStringProperty,
       interferometerStringProperty: stringProperties.screens.interferometerStringProperty,
       chirpStringProperty: stringProperties.screens.chirpStringProperty,
+      networkStringProperty: stringProperties.screens.networkStringProperty,
     };
   }
 
@@ -103,6 +105,11 @@ export class StringManager {
     return stringProperties.a11y.chirp;
   }
 
+  /** Accessibility strings for the Network screen. */
+  public getNetworkA11yStrings() {
+    return stringProperties.a11y.network;
+  }
+
   /** User-facing labels for the Waves screen. */
   public getWavesStrings() {
     return stringProperties.waves;
@@ -116,6 +123,11 @@ export class StringManager {
   /** User-facing labels for the Chirp screen. */
   public getChirpStrings() {
     return stringProperties.chirp;
+  }
+
+  /** User-facing labels for the Network screen. */
+  public getNetworkStrings() {
+    return stringProperties.network;
   }
 
   /**

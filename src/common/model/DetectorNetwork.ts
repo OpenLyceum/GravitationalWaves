@@ -13,7 +13,7 @@
 import { C } from "./PhysicalConstants.js";
 
 /** Mean Earth radius (m). Site elevations and the Earth's flattening are ignored. */
-export const EARTH_RADIUS = 6.371e6;
+const EARTH_RADIUS = 6.371e6;
 
 export type DetectorId = "H1" | "L1" | "V1" | "K1";
 
@@ -126,6 +126,7 @@ export function lightTravelTime(a: DetectorGeometry, b: DetectorGeometry): numbe
  * Antenna factors F₊ = D:e₊, F× = D:e× for a source beneath (lon, lat) with polarization
  * angle ψ. Wave-frame axes are local east and north at the sub-source point, rotated by ψ.
  */
+/** @internal Exported for unit tests of F₊ / F× at overhead. */
 export function networkAntennaPattern(
   detector: DetectorGeometry,
   sourceLon: number,
@@ -163,7 +164,7 @@ export function circularResponse(
  * Greenwich mean sidereal time (radians, 0–2π) at a GPS time, from the IAU 1982 linear
  * term. Accurate to a fraction of a degree, enough to place a catalog RA on the map.
  */
-export function greenwichSiderealTime(gpsSeconds: number): number {
+function greenwichSiderealTime(gpsSeconds: number): number {
   const GPS_EPOCH_UNIX = 315964800;
   const LEAP_SECONDS = 18; // GPS − UTC since 2017; 17 for 2015–2016 (0.004° error)
   const unix = gpsSeconds + GPS_EPOCH_UNIX - LEAP_SECONDS;

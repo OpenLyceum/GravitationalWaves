@@ -2,13 +2,14 @@
 
 [![CI](../../actions/workflows/ci.yml/badge.svg)](../../actions/workflows/ci.yml)
 
-Watch a gravitational wave stretch space, measure it with a laser interferometer, and dig a black-hole chirp out of detector noise.
+Watch a gravitational wave stretch space, measure it with a laser interferometer, dig a black-hole chirp out of detector noise, and locate the source on the sky with a detector network.
 
 ## Features
 
 - **Waves** — a ring of free test masses and a deforming grid show how + and × polarized waves stretch and squeeze space; a real-scale panel converts strain to arm-length change (4 km × 10⁻²¹ ≈ 1/430 of a proton).
 - **Interferometer** — a Michelson with optional Fabry–Pérot arms turns differential arm length into a change in output power; wave direction and polarization show the antenna pattern and its blind spot; seismic, thermal and shot noise build a sensitivity curve compared with LIGO Hanford in 2015.
 - **Chirp** — a binary's masses and distance set the inspiral chirp; whitened detector output, a spectrogram, template matching and an SNR-vs-chirp-mass scan show how matched filtering finds the signal; five real GWOSC detections can be overlaid and played as sound.
+- **Network** — LIGO Hanford, LIGO Livingston, Virgo and KAGRA hear the wave at slightly different times and strengths; equal-delay rings and a sky map show why two detectors give a ring and three or four a small patch, with GW150914 (delay measured from GWOSC data), GW170814 and GW170817 as presets.
 - English, Spanish, and French localization via `StringManager`
 - Default and projector color profiles
 - Progressive Web App (installable, offline-capable)

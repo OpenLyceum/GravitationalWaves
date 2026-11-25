@@ -38,6 +38,7 @@ const SENSITIVITY_AUGUST_2017 = { H1: 0.6, L1: 1, V1: 0.27 } as const;
  * cross-correlation, sign-inverted because the two detectors' arms are rotated by ≈ 90°).
  * The discovery paper quotes 6.9 (+0.5 / −0.4) ms. tests/networkModel.test.ts re-measures it.
  */
+/** Measured H1 − L1 lag (s); also shown on the arrival-traces caption. */
 export const GW150914_MEASURED_DELAY = 7.3e-3;
 
 export const NETWORK_PRESETS: readonly NetworkPreset[] = [

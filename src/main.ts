@@ -25,6 +25,7 @@ import { ChirpScreen } from "./chirp/ChirpScreen.js";
 import GravitationalWavesColors from "./GravitationalWavesColors.js";
 import { StringManager } from "./i18n/StringManager.js";
 import { InterferometerScreen } from "./interferometer/InterferometerScreen.js";
+import { NetworkScreen } from "./network/NetworkScreen.js";
 import { GravitationalWavesPreferencesModel } from "./preferences/GravitationalWavesPreferencesModel.js";
 import { GravitationalWavesPreferencesNode } from "./preferences/GravitationalWavesPreferencesNode.js";
 import { WavesScreen } from "./waves/WavesScreen.js";
@@ -49,6 +50,11 @@ onReadyToLaunch(() => {
     new ChirpScreen({
       name: stringManager.getScreenNames().chirpStringProperty,
       tandem: Tandem.ROOT.createTandem("chirpScreen"),
+      backgroundColorProperty: GravitationalWavesColors.backgroundColorProperty,
+    }),
+    new NetworkScreen({
+      name: stringManager.getScreenNames().networkStringProperty,
+      tandem: Tandem.ROOT.createTandem("networkScreen"),
       backgroundColorProperty: GravitationalWavesColors.backgroundColorProperty,
     }),
   ];

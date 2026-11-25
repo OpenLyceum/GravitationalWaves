@@ -3,7 +3,8 @@
   "screens": {
     "waves": "Waves",
     "interferometer": "Interferometer",
-    "chirp": "Chirp"
+    "chirp": "Chirp",
+    "network": "Network"
   },
   "waves": {
     "polarization": "Polarization",
@@ -190,9 +191,94 @@
         "timeControl": "Play, pause, and step",
         "resetAll": "Reset All"
       }
+    },
+    "network": {
+      "screenSummary": {
+        "playArea": "A world map shows where the gravitational wave came from, with detector sites, equal-delay rings, and a 90 % credible region. Arrival traces below show the same wave at each detector.",
+        "controlArea": "Controls choose a catalog event or custom source, enable detectors, set network SNR and measurement noise, toggle rings and the true position, play back arrivals, and Reset All.",
+        "interactionHint": "Turn detectors on or off, drag the true source on the map, or choose a real event to see how the sky region shrinks."
+      },
+      "currentDetails": "Detectors {{detectors}}, 90 % area {{area}} deg², delays {{delays}}, true position {{inside}} the 90 % region.",
+      "insideRegion": "inside",
+      "outsideRegion": "outside",
+      "unknownRegion": "unknown relative to",
+      "noDelays": "none",
+      "controls": {
+        "source": "Signal source",
+        "detectorH1": "Enable LIGO Hanford",
+        "detectorL1": "Enable LIGO Livingston",
+        "detectorV1": "Enable Virgo",
+        "detectorK1": "Enable KAGRA",
+        "networkSnr": "Network signal-to-noise ratio",
+        "measurementNoise": "Add measurement noise",
+        "newNoise": "Draw new noise realization",
+        "showRings": "Show equal-delay rings",
+        "showTruth": "Show true source position",
+        "sourcePosition": "Source position",
+        "timeControl": "Play, pause, and step",
+        "resetAll": "Reset All"
+      }
     }
   },
   "preferences": {
     "title": "Simulation"
+  },
+  "network": {
+    "mapTitle": "Where did the wave come from?",
+    "mapCaption": "Map shows the point on Earth directly beneath the source",
+    "oneDetectorNote": "One detector cannot tell the direction",
+    "noDetectorNote": "Turn on at least two detectors",
+    "legendTrue": "★ true source",
+    "legendPeak": "+ best estimate",
+    "legendRegion": "shaded = 90 % region",
+    "legendRing": "dashed = equal-delay ring",
+    "tracesTitle": "Arrival traces",
+    "tracesCaption": "Same wave, different arrival times and strengths",
+    "tracesXAxis": "time relative to arrival at Earth's centre (ms)",
+    "arrivalMs": "{{sign}}{{value}} ms",
+    "measuredDelayNote": "Measured from GWOSC data: H1 heard it {{delay}} ms after L1, inverted",
+    "controlsTitle": "Controls",
+    "source": "Source",
+    "customSource": "Custom source",
+    "presetGW150914": "GW150914 (2 detectors)",
+    "presetGW170814": "GW170814 (first with Virgo)",
+    "presetGW170817": "GW170817 (neutron stars)",
+    "presetInfo": "{{date}} · {{detectors}}",
+    "detectorH1": "H1 · LIGO Hanford",
+    "detectorL1": "L1 · LIGO Livingston",
+    "detectorV1": "V1 · Virgo",
+    "detectorK1": "K1 · KAGRA",
+    "detectorShortH1": "H1 Hanford",
+    "detectorShortL1": "L1 Livingston",
+    "detectorShortV1": "V1 Virgo",
+    "detectorShortK1": "K1 KAGRA",
+    "networkSnr": "Network SNR",
+    "snrPattern": "{{value}}",
+    "measurementNoise": "Measurement noise",
+    "newNoise": "New noise",
+    "showRings": "Show delay rings",
+    "showTruth": "Show true position",
+    "readoutsTitle": "Readouts",
+    "headerDetector": "Det",
+    "headerArrival": "t (ms)",
+    "headerResponse": "R",
+    "headerSnr": "SNR",
+    "headerSigma": "±σₜ",
+    "pairDelay": "{{a}} − {{b}}: {{delay}} ms (max ±{{max}} ms)",
+    "area90": "90 % region: {{area}} deg² (≈ {{moons}} full Moons)",
+    "area90WholeSky": "90 % region: whole sky",
+    "publishedArea": "published: {{area}} deg²",
+    "pointingError": "Best estimate is {{error}}° from the source",
+    "ringOnlyNote": "Two detectors: the source can be anywhere along the ring",
+    "emDash": "—",
+    "slowMotion": "Slowed down {{factor}}×",
+    "sourcePositionValue": "longitude {{lon}}, latitude {{lat}}",
+    "lonEast": "{{value}}° E",
+    "lonWest": "{{value}}° W",
+    "latNorth": "{{value}}° N",
+    "latSouth": "{{value}}° S",
+    "ringLabel": "{{a}}–{{b}}",
+    "responseValue": "{{value}}",
+    "timingErrorValue": "±{{value}}"
   }
 }

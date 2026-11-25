@@ -23,7 +23,7 @@ import {
 } from "./DetectorNetwork.js";
 
 /** Effective signal bandwidth σ_f (Hz) in the timing error σ_t = 1/(2π σ_f ρ). */
-export const EFFECTIVE_BANDWIDTH = 100;
+const EFFECTIVE_BANDWIDTH = 100;
 
 /** Grid resolution (degrees). Longitude −180..180, latitude 90..−90 at cell centres. */
 export const SKY_GRID_STEP_DEG = 1;
@@ -79,6 +79,21 @@ export function cellCentre(column: number, row: number): { readonly lon: number;
     lon: (-180 + (column + 0.5) * SKY_GRID_STEP_DEG) * DEG,
     lat: (90 - (row + 0.5) * SKY_GRID_STEP_DEG) * DEG,
   };
+}
+
+/**
+ * Posterior density at (lon, lat) in radians: the cell that contains that direction.
+ * Returns 0 when the map is empty.
+ */
+export function densityAt(map: SkyMap, lon: number, lat: number): number {
+  if (map.density.length === 0) {
+    return 0;
+  }
+  const lonDeg = Math.max(-180, Math.min(180 - 1e-9, lon / DEG));
+  const latDeg = Math.max(-90, Math.min(90, lat / DEG));
+  const column = Math.min(SKY_GRID_WIDTH - 1, Math.max(0, Math.floor((lonDeg + 180) / SKY_GRID_STEP_DEG)));
+  const row = Math.min(SKY_GRID_HEIGHT - 1, Math.max(0, Math.floor((90 - latDeg) / SKY_GRID_STEP_DEG)));
+  return map.density[row * SKY_GRID_WIDTH + column] ?? 0;
 }
 
 type DetectorGrids = { readonly delay: Float64Array; readonly response: Float64Array };
