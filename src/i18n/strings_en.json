@@ -5,22 +5,117 @@
     "interferometer": "Interferometer",
     "chirp": "Chirp"
   },
+  "waves": {
+    "polarization": "Polarization",
+    "plus": "+",
+    "cross": "×",
+    "exaggeration": "Exaggeration",
+    "exaggerationNote": "Real strains are ~10<sup>−21</sup>",
+    "frequency": "Frequency",
+    "hzPattern": "{{value}} Hz",
+    "realScale": "Real scale",
+    "realStrain": "Real strain h",
+    "scientificStrain": "{{coeff}} × 10<sup>{{exp}}</sup>",
+    "baseline": "Baseline L",
+    "baselineMeter": "1 m",
+    "baselineLigo": "LIGO arm 4 km",
+    "baselineEarthSun": "Earth–Sun",
+    "deltaL": "ΔL = hL",
+    "deltaLValue": "{{value}} m",
+    "compareAtom": "about the size of an atom",
+    "compareSmallerThanAtom": "about {{factor}} times smaller than an atom",
+    "compareSmallerThanProton": "about {{factor}} times smaller than a proton",
+    "propagationCaption": "Wave toward you (⊙)",
+    "strainChartTitle": "Strain vs time",
+    "strainAxis": "h (visual)",
+    "armLabelX": "Lx",
+    "armLabelY": "Ly",
+    "controlsTitle": "Controls"
+  },
+  "interferometer": {
+    "armLength": "Arm length",
+    "armLengthPattern": "{{value}} km",
+    "fabryPerot": "Fabry–Pérot cavities",
+    "laserPower": "Laser power",
+    "laserPowerPattern": "{{value}} × P₀",
+    "noiseSeismic": "Seismic noise",
+    "noiseThermal": "Thermal noise",
+    "noiseShot": "Shot noise",
+    "showRealCurve": "LIGO Hanford ASD",
+    "theta": "Wave direction θ",
+    "psi": "Polarization angle ψ",
+    "degreesPattern": "{{value}}°",
+    "polarization": "Polarization",
+    "plus": "+",
+    "cross": "×",
+    "blindSpot": "Blind spot",
+    "blindSpotNote": "Blind spot: F₊ ≈ F× ≈ 0",
+    "deltaL": "ΔL",
+    "deltaLValue": "{{value}} m",
+    "deltaPhi": "Δφ",
+    "deltaPhiValue": "{{value}} rad",
+    "fPlus": "F₊",
+    "fCross": "F×",
+    "antennaValue": "{{value}}",
+    "response": "Detector response",
+    "responseValue": "{{value}}",
+    "powerChartTitle": "Output power vs time",
+    "powerAxis": "ΔP / P_in",
+    "powerFullScale": "full scale ±{{value}}",
+    "fabryGainLabel": "×{{gain}}",
+    "sensitivityTitle": "Strain sensitivity",
+    "freqAxis": "Frequency (Hz)",
+    "asdAxis": "ASD (Hz⁻¹/²)",
+    "ligoCurveLabel": "LIGO Hanford 2015",
+    "legendSeismic": "Seismic",
+    "legendThermal": "Thermal",
+    "legendShot": "Shot",
+    "legendTotal": "Total",
+    "sensitiveBand": "Most sensitive band",
+    "bestSensitivity": "Best sensitivity ≈ {{value}} at {{freq}} Hz",
+    "controlsTitle": "Controls",
+    "readoutsTitle": "Readouts"
+  },
   "a11y": {
     "waves": {
       "screenSummary": {
-        "playArea": "The play area shows the main simulation content.",
-        "controlArea": "The control area has a Reset All button that returns the simulation to its starting state.",
-        "interactionHint": "Explore the simulation by interacting with its controls."
+        "playArea": "A ring of free-falling test masses stretches and squeezes as a gravitational wave passes. A strain-versus-time plot and real-scale length change are shown.",
+        "controlArea": "Controls set polarization, visual exaggeration, frequency, playback, and the real strain baseline. Reset All returns to the starting state.",
+        "interactionHint": "Choose plus or cross polarization, adjust exaggeration, and press play to watch the ring deform."
       },
-      "currentDetails": "The simulation is in its initial state."
+      "currentDetails": "Polarization {{polarization}}, visual strain {{strain}}, frequency {{frequency}} Hz, real ΔL {{deltaL}} m.",
+      "controls": {
+        "polarization": "Polarization",
+        "exaggeration": "Visual strain exaggeration",
+        "frequency": "Wave frequency",
+        "realStrain": "Real strain magnitude",
+        "baseline": "Baseline length",
+        "timeControl": "Play, pause, and step",
+        "resetAll": "Reset All"
+      }
     },
     "interferometer": {
       "screenSummary": {
-        "playArea": "The play area shows the main simulation content.",
-        "controlArea": "The control area has a Reset All button that returns the simulation to its starting state.",
-        "interactionHint": "Explore the simulation by interacting with its controls."
+        "playArea": "A Michelson interferometer schematic shows arm motion and output power. A log-log sensitivity chart compares toy noise terms with a real LIGO curve.",
+        "controlArea": "Controls set arm length, cavities, laser power, noise sources, sky angles, polarization, and playback. Reset All returns to the starting state.",
+        "interactionHint": "Change arm length or laser power and watch the sensitivity curve, or press Blind spot to null the antenna response."
       },
-      "currentDetails": "The simulation is in its initial state."
+      "currentDetails": "Arm length {{arm}} km, Fabry–Pérot {{fp}}, θ {{theta}}°, response {{response}}, best sensitivity {{best}}.",
+      "controls": {
+        "armLength": "Arm length",
+        "fabryPerot": "Fabry–Pérot cavities",
+        "laserPower": "Laser power",
+        "noiseSeismic": "Show seismic noise",
+        "noiseThermal": "Show thermal noise",
+        "noiseShot": "Show shot noise",
+        "showRealCurve": "Show LIGO Hanford ASD",
+        "theta": "Wave direction theta",
+        "psi": "Polarization angle psi",
+        "polarization": "Wave polarization",
+        "blindSpot": "Set blind-spot sky position",
+        "timeControl": "Play, pause, and step",
+        "resetAll": "Reset All"
+      }
     },
     "chirp": {
       "screenSummary": {

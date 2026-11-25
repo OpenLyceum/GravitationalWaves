@@ -28,6 +28,7 @@ export class GravitationalWavesPreferencesModel {
   //   // in reset():
   //   this.showGridProperty.reset();
 
+  // biome-ignore lint/complexity/noUselessConstructor: tandem reserved for future preference Properties
   public constructor(_tandem?: Tandem) {
     // Attach preference Properties under this tandem when added.
   }

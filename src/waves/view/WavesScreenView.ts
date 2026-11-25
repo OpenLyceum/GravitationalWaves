@@ -1,43 +1,41 @@
 /**
  * WavesScreenView.ts
  *
- * The top-level view for the simulation screen.
- *
- * All visual nodes are added here. Follow these conventions:
- *   - Use this.layoutBounds for positioning (never magic pixel values)
- *   - Keep a ResetAllButton that calls model.reset() and this.reset()
- *   - Override step(dt) for frame-by-frame animation
- *
- * ── Adding content ────────────────────────────────────────────────────────────
- * 1. Create Node subclasses in separate files (e.g. GravitationalWavesControlPanel.ts)
- * 2. Instantiate them here and call this.addChild(...)
- * 3. Link them to model properties:
- *      model.isRunningProperty.link( isRunning => { ... } );
- *
- * ── Layout bounds ─────────────────────────────────────────────────────────────
- * SceneryStack uses a virtual 1024×618 coordinate space by default.
- * this.layoutBounds gives you the full rectangle; use it for alignment:
- *   center, minX, maxX, minY, maxY, width, height
+ * Play area: deforming test-mass ring, strain strip, control + real-scale panels,
+ * TimeControlNode centred under the ring.
  */
-
 import { type EmptySelfOptions, optionize } from "scenerystack/phet-core";
-import { Node, Rectangle } from "scenerystack/scenery";
-import { ResetAllButton } from "scenerystack/scenery-phet";
+import { Node, Rectangle, VBox } from "scenerystack/scenery";
+import { ResetAllButton, TimeControlNode } from "scenerystack/scenery-phet";
 import { ScreenView, type ScreenViewOptions } from "scenerystack/sim";
-import { FLAT_RESET_ALL_BUTTON_OPTIONS } from "../../common/GravitationalWavesButtonOptions.js";
+import {
+  FLAT_PLAY_PAUSE_STEP_BUTTON_OPTIONS,
+  FLAT_RESET_ALL_BUTTON_OPTIONS,
+  TIME_CONTROL_SPEED_RADIO_OPTIONS,
+} from "../../common/GravitationalWavesButtonOptions.js";
+import { StripChart } from "../../common/view/StripChart.js";
 import GravitationalWavesColors from "../../GravitationalWavesColors.js";
-import { SCREEN_VIEW_MARGIN } from "../../GravitationalWavesConstants.js";
+import {
+  CONTROL_PANEL_WIDTH,
+  SCREEN_VIEW_MARGIN,
+  STEP_DT,
+  STRAIN_CHART_CYCLES,
+  STRAIN_CHART_SAMPLE_RATE,
+  TEST_MASS_RING_RADIUS,
+} from "../../GravitationalWavesConstants.js";
+import { StringManager } from "../../i18n/StringManager.js";
 import type { WavesModel } from "../model/WavesModel.js";
+import { RealScalePanel } from "./RealScalePanel.js";
+import { TestMassRingNode } from "./TestMassRingNode.js";
+import { WavesControlPanel } from "./WavesControlPanel.js";
 import { WavesScreenSummaryContent } from "./WavesScreenSummaryContent.js";
 
 export type WavesScreenViewOptions = ScreenViewOptions;
 
 export class WavesScreenView extends ScreenView {
+  private readonly strainChart: StripChart;
+
   public constructor(model: WavesModel, providedOptions?: WavesScreenViewOptions) {
-    // ── Accessibility: screen summary ───────────────────────────────────────────
-    // The screen summary is the first thing a screen-reader user encounters. It
-    // is registered here, in the ScreenView's super() options, so every sim wires
-    // it the same way. See WavesScreenSummaryContent for the four content regions.
     const options = optionize<WavesScreenViewOptions, EmptySelfOptions, ScreenViewOptions>()(
       {
         screenSummaryContent: new WavesScreenSummaryContent(model),
@@ -46,106 +44,127 @@ export class WavesScreenView extends ScreenView {
     );
     super(options);
 
-    // ── Background ────────────────────────────────────────────────────────────
-    // A full-screen rectangle that follows the active color profile.
-    // Replace or remove once you add real content.
+    const strings = StringManager.getInstance().getWavesStrings();
+    const a11y = StringManager.getInstance().getWavesA11yStrings();
+
     const backgroundRect = new Rectangle(0, 0, this.layoutBounds.width, this.layoutBounds.height, {
       fill: GravitationalWavesColors.backgroundColorProperty,
     });
     this.addChild(backgroundRect);
 
-    // ── Accessibility: per-control names ────────────────────────────────────────
-    // EVERY interactive node must carry an `accessibleName` (and an
-    // `accessibleHelpText` where useful), sourced from the StringManager `a11y`
-    // string group — never a hard-coded English literal. Sun/scenery-phet controls
-    // (NumberControl, Checkbox, ComboBox, AquaRadioButtonGroup, …) accept it as an
-    // option; a draggable plain Node needs `tagName: "div", focusable: true` too.
-    // Example (uncomment and adapt when you add a real control; add the
-    // `a11y.controls.startButton` string to every strings_*.json first):
-    //
-    //   const a11y = StringManager.getInstance().getA11yStrings();
-    //   const startButton = new RectangularPushButton({
-    //     ...FLAT_RECTANGULAR_BUTTON_OPTIONS, // flat appearance, not SceneryStack's default 3-D look
-    //     content: someIcon,
-    //     listener: () => model.start(),
-    //     accessibleName: a11y.controls.startButtonStringProperty,
-    //   });
-    //   this.addChild(startButton);
+    const controlPanel = new WavesControlPanel(model);
+    controlPanel.maxWidth = CONTROL_PANEL_WIDTH;
 
-    // ── Reset All button ──────────────────────────────────────────────────────
-    // Always position at bottom-right (PhET convention).
+    const realScalePanel = new RealScalePanel(model);
+    realScalePanel.maxWidth = CONTROL_PANEL_WIDTH;
+
+    const rightColumn = new VBox({
+      spacing: 10,
+      align: "right",
+      children: [controlPanel, realScalePanel],
+    });
+    rightColumn.right = this.layoutBounds.maxX - SCREEN_VIEW_MARGIN;
+    rightColumn.top = this.layoutBounds.minY + SCREEN_VIEW_MARGIN;
+    this.addChild(rightColumn);
+
     const resetAllButton = new ResetAllButton({
       ...FLAT_RESET_ALL_BUTTON_OPTIONS,
       listener: () => {
+        this.interruptSubtreeInput();
         model.reset();
         this.reset();
       },
+      accessibleName: a11y.controls.resetAllStringProperty,
       right: this.layoutBounds.maxX - SCREEN_VIEW_MARGIN,
       bottom: this.layoutBounds.maxY - SCREEN_VIEW_MARGIN,
     });
     this.addChild(resetAllButton);
 
-    // ── Accessibility: keyboard / reading traversal order ───────────────────────
-    // Make the parallel DOM (Tab order and screen-reader reading order)
-    // deterministic and independent of child z-order. ScreenView throws if you
-    // set pdomOrder on itself, so add a lightweight wrapper Node that "borrows"
-    // the interactive nodes in the order a user should reach them — Reset All
-    // last. Non-interactive decoration (background, placeholder) is omitted.
+    // Keep the column clear of Reset All (scale down if the stack is too tall).
+    const maxColumnBottom = resetAllButton.top - 8;
+    if (rightColumn.bottom > maxColumnBottom) {
+      const available = maxColumnBottom - rightColumn.top;
+      if (available > 40 && rightColumn.height > available) {
+        rightColumn.setScaleMagnitude(available / rightColumn.height);
+        rightColumn.right = this.layoutBounds.maxX - SCREEN_VIEW_MARGIN;
+        rightColumn.top = this.layoutBounds.minY + SCREEN_VIEW_MARGIN;
+      } else {
+        rightColumn.bottom = maxColumnBottom;
+      }
+    }
+
+    const playAreaRight = rightColumn.left - 16;
+
+    const ring = new TestMassRingNode(model);
+    // Centre the ring in the free play area (left of the right-column panels).
+    ring.centerX = Math.min(this.layoutBounds.centerX - 40, (SCREEN_VIEW_MARGIN + playAreaRight) / 2);
+    ring.centerY = this.layoutBounds.centerY - 55;
+    this.addChild(ring);
+
+    // Widen the strip so its right edge lines up with the ring.
+    const strainWidth = Math.max(
+      360,
+      Math.min(playAreaRight, ring.centerX + TEST_MASS_RING_RADIUS) - SCREEN_VIEW_MARGIN,
+    );
+    this.strainChart = new StripChart(model.strainHistory, {
+      width: strainWidth,
+      height: 100,
+      title: strings.strainChartTitleStringProperty,
+      yLabel: strings.strainAxisStringProperty,
+      showZeroLine: true,
+      windowSamples: () => Math.ceil((STRAIN_CHART_CYCLES / model.frequencyProperty.value) * STRAIN_CHART_SAMPLE_RATE),
+      ySpan: () => Math.max(model.visualStrainProperty.value, 0.05),
+      stroke: GravitationalWavesColors.strainTraceColorProperty,
+    });
+    this.strainChart.left = SCREEN_VIEW_MARGIN;
+    this.strainChart.bottom = this.layoutBounds.maxY - SCREEN_VIEW_MARGIN;
+    this.addChild(this.strainChart);
+
+    const timeControl = new TimeControlNode(model.timer.isPlayingProperty, {
+      timeSpeedProperty: model.timer.timeSpeedProperty,
+      timeSpeeds: [...model.timer.timeSpeeds],
+      // Speeds to the right of play/pause (standard); ring is left of the panels so Fast fits.
+      speedRadioButtonGroupPlacement: "right",
+      flowBoxSpacing: 20,
+      playPauseStepButtonOptions: {
+        ...FLAT_PLAY_PAUSE_STEP_BUTTON_OPTIONS,
+        stepForwardButtonOptions: {
+          ...FLAT_PLAY_PAUSE_STEP_BUTTON_OPTIONS.stepForwardButtonOptions,
+          listener: () => model.stepOnce(STEP_DT),
+        },
+      },
+      ...TIME_CONTROL_SPEED_RADIO_OPTIONS,
+    });
+    timeControl.centerX = ring.centerX;
+    timeControl.top = ring.centerY + TEST_MASS_RING_RADIUS + 18;
+    if (timeControl.right > playAreaRight) {
+      timeControl.right = playAreaRight;
+    }
+    if (timeControl.bottom > this.strainChart.top - 8) {
+      timeControl.bottom = this.strainChart.top - 8;
+    }
+    this.addChild(timeControl);
+
     this.addChild(
       new Node({
         pdomOrder: [
-          // TODO: add the sim's interactive nodes here, in traversal order
+          controlPanel.polarizationGroup,
+          controlPanel.exaggerationControl,
+          controlPanel.frequencyControl,
+          timeControl,
+          realScalePanel.strainControl,
+          realScalePanel.baselineGroup,
           resetAllButton,
         ],
       }),
     );
   }
 
-  /**
-   * Resets view-side state (animations, panel visibility, etc.).
-   * Called by the Reset All button listener.
-   */
   public reset(): void {
-    // TODO: reset any view-side state here
+    // View state is fully driven by the model.
   }
 
-  /**
-   * Steps the view forward by dt seconds for animation.
-   * @param _dt - elapsed time in seconds
-   */
   public override step(_dt: number): void {
-    // TODO: implement animation updates here
+    this.strainChart.update();
   }
-
-  // ── Accessibility / listeners: dispose ─────────────────────────────────────
-  // ScreenView is `isDisposable: false` and lives for the whole sim, so this
-  // class rarely needs dispose(). Child Nodes (and a live currentDetails
-  // DerivedProperty you own on a short-lived object) do. When you add
-  // DerivedProperty / Multilink / Property.link against model state, keep the
-  // references and tear them down — forks copy what they see. Pattern:
-  //
-  // private readonly disposeWavesScreenView: () => void;
-  //
-  // // in the constructor, after creating the listeners:
-  // const statusMultilink = Multilink.multilink(
-  //   [model.someProperty, model.otherProperty],
-  //   (a, b) => { /* update view from model */ },
-  // );
-  // const detailsProperty = new DerivedProperty(
-  //   [model.stateProperty],
-  //   (state) => `State: ${state}`,
-  // ); // → pass as currentDetailsContent in WavesScreenSummaryContent
-  // const onExternal = (v: number) => { /* … */ };
-  // model.externalProperty.link(onExternal); // Property you do NOT own
-  //
-  // this.disposeWavesScreenView = () => {
-  //   statusMultilink.dispose();                 // Multilink you created
-  //   detailsProperty.dispose();                 // DerivedProperty you created
-  //   model.externalProperty.unlink(onExternal); // undo external link
-  // };
-  //
-  // public override dispose(): void {
-  //   this.disposeWavesScreenView();
-  //   super.dispose();
-  // }
 }

@@ -1,31 +1,126 @@
 {
-  "title": "Gravitational Waves",
+  "title": "Ondes gravitationnelles",
   "screens": {
-    "waves": "Waves",
-    "interferometer": "Interferometer",
+    "waves": "Ondes",
+    "interferometer": "Interféromètre",
     "chirp": "Chirp"
+  },
+  "waves": {
+    "polarization": "Polarisation",
+    "plus": "+",
+    "cross": "×",
+    "exaggeration": "Exagération",
+    "exaggerationNote": "Les déformations réelles sont ~10<sup>−21</sup>",
+    "frequency": "Fréquence",
+    "hzPattern": "{{value}} Hz",
+    "realScale": "Échelle réelle",
+    "realStrain": "Déformation réelle h",
+    "scientificStrain": "{{coeff}} × 10<sup>{{exp}}</sup>",
+    "baseline": "Baseline L",
+    "baselineMeter": "1 m",
+    "baselineLigo": "Bras LIGO 4 km",
+    "baselineEarthSun": "Terre–Soleil",
+    "deltaL": "ΔL = hL",
+    "deltaLValue": "{{value}} m",
+    "compareAtom": "environ la taille d’un atome",
+    "compareSmallerThanAtom": "environ {{factor}} fois plus petit qu’un atome",
+    "compareSmallerThanProton": "environ {{factor}} fois plus petit qu’un proton",
+    "propagationCaption": "Onde vers vous (⊙)",
+    "strainChartTitle": "Déformation en fonction du temps",
+    "strainAxis": "h (visuel)",
+    "armLabelX": "Lx",
+    "armLabelY": "Ly",
+    "controlsTitle": "Commandes"
+  },
+  "interferometer": {
+    "armLength": "Longueur des bras",
+    "armLengthPattern": "{{value}} km",
+    "fabryPerot": "Cavités Fabry–Pérot",
+    "laserPower": "Puissance laser",
+    "laserPowerPattern": "{{value}} × P₀",
+    "noiseSeismic": "Bruit sismique",
+    "noiseThermal": "Bruit thermique",
+    "noiseShot": "Bruit de grenaille",
+    "showRealCurve": "ASD LIGO Hanford",
+    "theta": "Direction de l’onde θ",
+    "psi": "Angle de polarisation ψ",
+    "degreesPattern": "{{value}}°",
+    "polarization": "Polarisation",
+    "plus": "+",
+    "cross": "×",
+    "blindSpot": "Angle mort",
+    "blindSpotNote": "Angle mort : F₊ ≈ F× ≈ 0",
+    "deltaL": "ΔL",
+    "deltaLValue": "{{value}} m",
+    "deltaPhi": "Δφ",
+    "deltaPhiValue": "{{value}} rad",
+    "fPlus": "F₊",
+    "fCross": "F×",
+    "antennaValue": "{{value}}",
+    "response": "Réponse du détecteur",
+    "responseValue": "{{value}}",
+    "powerChartTitle": "Puissance de sortie en fonction du temps",
+    "powerAxis": "ΔP / P_in",
+    "powerFullScale": "pleine échelle ±{{value}}",
+    "fabryGainLabel": "×{{gain}}",
+    "sensitivityTitle": "Sensibilité en déformation",
+    "freqAxis": "Fréquence (Hz)",
+    "asdAxis": "ASD (Hz⁻¹/²)",
+    "ligoCurveLabel": "LIGO Hanford 2015",
+    "legendSeismic": "Sismique",
+    "legendThermal": "Thermique",
+    "legendShot": "Grenaille",
+    "legendTotal": "Total",
+    "sensitiveBand": "Bande la plus sensible",
+    "bestSensitivity": "Meilleure sensibilité ≈ {{value}} à {{freq}} Hz",
+    "controlsTitle": "Commandes",
+    "readoutsTitle": "Lectures"
   },
   "a11y": {
     "waves": {
       "screenSummary": {
-        "playArea": "La zone de jeu affiche le contenu principal de la simulation.",
-        "controlArea": "La zone de contrôle comporte un bouton Tout réinitialiser qui ramène la simulation à son état initial.",
-        "interactionHint": "Explorez la simulation en interagissant avec ses commandes."
+        "playArea": "Un anneau de masses d’essai en chute libre s’étire et se comprime au passage d’une onde gravitationnelle. Un graphique déformation–temps et le changement de longueur à l’échelle réelle sont affichés.",
+        "controlArea": "Les commandes règlent la polarisation, l’exagération visuelle, la fréquence, la lecture et la baseline réelle. Tout réinitialiser ramène l’état initial.",
+        "interactionHint": "Choisissez la polarisation plus ou croix, réglez l’exagération et appuyez sur lecture pour voir l’anneau se déformer."
       },
-      "currentDetails": "La simulation est dans son état initial."
+      "currentDetails": "Polarisation {{polarization}}, déformation visuelle {{strain}}, fréquence {{frequency}} Hz, ΔL réel {{deltaL}} m.",
+      "controls": {
+        "polarization": "Polarisation",
+        "exaggeration": "Exagération de la déformation visuelle",
+        "frequency": "Fréquence de l’onde",
+        "realStrain": "Amplitude de la déformation réelle",
+        "baseline": "Longueur de baseline",
+        "timeControl": "Lecture, pause et pas à pas",
+        "resetAll": "Tout réinitialiser"
+      }
     },
     "interferometer": {
       "screenSummary": {
-        "playArea": "La zone de jeu affiche le contenu principal de la simulation.",
-        "controlArea": "La zone de contrôle comporte un bouton Tout réinitialiser qui ramène la simulation à son état initial.",
-        "interactionHint": "Explorez la simulation en interagissant avec ses commandes."
+        "playArea": "Un schéma d’interféromètre de Michelson montre le mouvement des bras et la puissance de sortie. Un graphique log–log compare les bruits modèles à une courbe LIGO réelle.",
+        "controlArea": "Les commandes règlent la longueur des bras, les cavités, la puissance laser, les sources de bruit, les angles du ciel, la polarisation et la lecture. Tout réinitialiser ramène l’état initial.",
+        "interactionHint": "Changez la longueur des bras ou la puissance laser et observez la courbe de sensibilité, ou appuyez sur Angle mort pour annuler la réponse d’antenne."
       },
-      "currentDetails": "La simulation est dans son état initial."
+      "currentDetails": "Longueur des bras {{arm}} km, Fabry–Pérot {{fp}}, θ {{theta}}°, réponse {{response}}, meilleure sensibilité {{best}}.",
+      "controls": {
+        "armLength": "Longueur des bras",
+        "fabryPerot": "Cavités Fabry–Pérot",
+        "laserPower": "Puissance laser",
+        "noiseSeismic": "Afficher le bruit sismique",
+        "noiseThermal": "Afficher le bruit thermique",
+        "noiseShot": "Afficher le bruit de grenaille",
+        "showRealCurve": "Afficher l’ASD LIGO Hanford",
+        "theta": "Direction de l’onde thêta",
+        "psi": "Angle de polarisation psi",
+        "polarization": "Polarisation de l’onde",
+        "blindSpot": "Placer l’angle mort dans le ciel",
+        "timeControl": "Lecture, pause et pas à pas",
+        "resetAll": "Tout réinitialiser"
+      }
     },
     "chirp": {
       "screenSummary": {
-        "playArea": "La zone de jeu affiche le contenu principal de la simulation.",
-        "controlArea": "La zone de contrôle comporte un bouton Tout réinitialiser qui ramène la simulation à son état initial.",
+        "playArea": "La zone de jeu montre le contenu principal de la simulation.",
+        "controlArea": "La zone de commande a un bouton Tout réinitialiser qui ramène la simulation à son état initial.",
         "interactionHint": "Explorez la simulation en interagissant avec ses commandes."
       },
       "currentDetails": "La simulation est dans son état initial."

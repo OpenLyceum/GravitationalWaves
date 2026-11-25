@@ -1,41 +1,54 @@
 /**
  * WavesScreenSummaryContent.ts
  *
- * The accessible screen summary read by screen readers (SceneryStack's
- * Interactive Description). It appears at the top of the parallel DOM and gives
- * a non-visual user a way to orient themselves and to re-read the simulation's
- * current state at any time.
- *
- * A summary has four regions (all optional, but provide at least the first
- * three in every sim for consistency across OpenLyceum):
- *   - playAreaContent       — what the play area contains
- *   - controlAreaContent    — what the controls do
- *   - currentDetailsContent — a LIVE paragraph describing current state
- *   - interactionHintContent — a short hint on how to get started
- *
- * ── Making "current details" live ─────────────────────────────────────────────
- * The template has no model state, so currentDetails is a static string. In a
- * real sim, build a DerivedProperty over the relevant model Properties and pass
- * it as `currentDetailsContent` so the paragraph updates as the sim runs.
- * See LunarLander/src/.../LunarLanderScreenSummaryContent.ts for the pattern.
- * If that DerivedProperty (or any Multilink) is owned by a short-lived object,
- * dispose it on teardown — see the commented dispose() stub in WavesScreenView.
+ * Accessible screen summary with a live current-details paragraph.
  */
+import { DerivedProperty } from "scenerystack/axon";
+import { toFixed } from "scenerystack/dot";
+import { StringUtils } from "scenerystack/phetcommon";
 import { ScreenSummaryContent } from "scenerystack/sim";
+import { formatScientific } from "../../common/view/scientificFormat.js";
 import { StringManager } from "../../i18n/StringManager.js";
 import type { WavesModel } from "../model/WavesModel.js";
 
 export class WavesScreenSummaryContent extends ScreenSummaryContent {
-  // `model` is unused in the template but kept in the signature so real sims can
-  // derive a live currentDetailsContent from it without changing call sites.
-  public constructor(_model: WavesModel) {
+  private readonly disposeSummary: () => void;
+
+  public constructor(model: WavesModel) {
     const a11y = StringManager.getInstance().getWavesA11yStrings();
+    const strings = StringManager.getInstance().getWavesStrings();
+
+    const currentDetailsProperty = new DerivedProperty(
+      [
+        model.polarizationProperty,
+        model.visualStrainProperty,
+        model.frequencyProperty,
+        model.deltaLProperty,
+        a11y.currentDetailsStringProperty,
+        strings.plusStringProperty,
+        strings.crossStringProperty,
+      ],
+      (pol, strain, frequency, deltaL, pattern, plus, cross) =>
+        StringUtils.fillIn(pattern, {
+          polarization: pol === "plus" ? plus : cross,
+          strain: toFixed(strain, 2),
+          frequency: toFixed(frequency, 2),
+          deltaL: formatScientific(deltaL, 2),
+        }),
+    );
 
     super({
       playAreaContent: a11y.screenSummary.playAreaStringProperty,
       controlAreaContent: a11y.screenSummary.controlAreaStringProperty,
-      currentDetailsContent: a11y.currentDetailsStringProperty,
+      currentDetailsContent: currentDetailsProperty,
       interactionHintContent: a11y.screenSummary.interactionHintStringProperty,
     });
+
+    this.disposeSummary = () => currentDetailsProperty.dispose();
+  }
+
+  public override dispose(): void {
+    this.disposeSummary();
+    super.dispose();
   }
 }

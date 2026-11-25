@@ -1,41 +1,55 @@
 /**
  * InterferometerScreenSummaryContent.ts
  *
- * The accessible screen summary read by screen readers (SceneryStack's
- * Interactive Description). It appears at the top of the parallel DOM and gives
- * a non-visual user a way to orient themselves and to re-read the simulation's
- * current state at any time.
- *
- * A summary has four regions (all optional, but provide at least the first
- * three in every sim for consistency across OpenLyceum):
- *   - playAreaContent       — what the play area contains
- *   - controlAreaContent    — what the controls do
- *   - currentDetailsContent — a LIVE paragraph describing current state
- *   - interactionHintContent — a short hint on how to get started
- *
- * ── Making "current details" live ─────────────────────────────────────────────
- * The template has no model state, so currentDetails is a static string. In a
- * real sim, build a DerivedProperty over the relevant model Properties and pass
- * it as `currentDetailsContent` so the paragraph updates as the sim runs.
- * See LunarLander/src/.../LunarLanderScreenSummaryContent.ts for the pattern.
- * If that DerivedProperty (or any Multilink) is owned by a short-lived object,
- * dispose it on teardown — see the commented dispose() stub in InterferometerScreenView.
+ * Accessible screen summary with a live current-details paragraph.
  */
+import { DerivedProperty } from "scenerystack/axon";
+import { toFixed } from "scenerystack/dot";
+import { StringUtils } from "scenerystack/phetcommon";
 import { ScreenSummaryContent } from "scenerystack/sim";
+import { formatScientific } from "../../common/view/scientificFormat.js";
 import { StringManager } from "../../i18n/StringManager.js";
 import type { InterferometerModel } from "../model/InterferometerModel.js";
 
 export class InterferometerScreenSummaryContent extends ScreenSummaryContent {
-  // `model` is unused in the template but kept in the signature so real sims can
-  // derive a live currentDetailsContent from it without changing call sites.
-  public constructor(_model: InterferometerModel) {
+  private readonly disposeSummary: () => void;
+
+  public constructor(model: InterferometerModel) {
     const a11y = StringManager.getInstance().getInterferometerA11yStrings();
+
+    const currentDetailsProperty = new DerivedProperty(
+      [
+        model.armLengthKmProperty,
+        model.fabryPerotProperty,
+        model.thetaProperty,
+        model.detectorResponseProperty,
+        model.laserPowerProperty,
+        a11y.currentDetailsStringProperty,
+      ],
+      (arm, fp, theta, response, _power, pattern) => {
+        const best = model.bestSensitivity();
+        return StringUtils.fillIn(pattern, {
+          arm: toFixed(arm, 1),
+          fp: fp ? "on" : "off",
+          theta: toFixed(theta, 0),
+          response: toFixed(response, 3),
+          best: formatScientific(best.asd, 1),
+        });
+      },
+    );
 
     super({
       playAreaContent: a11y.screenSummary.playAreaStringProperty,
       controlAreaContent: a11y.screenSummary.controlAreaStringProperty,
-      currentDetailsContent: a11y.currentDetailsStringProperty,
+      currentDetailsContent: currentDetailsProperty,
       interactionHintContent: a11y.screenSummary.interactionHintStringProperty,
     });
+
+    this.disposeSummary = () => currentDetailsProperty.dispose();
+  }
+
+  public override dispose(): void {
+    this.disposeSummary();
+    super.dispose();
   }
 }

@@ -103,6 +103,16 @@ export class StringManager {
     return stringProperties.a11y.chirp;
   }
 
+  /** User-facing labels for the Waves screen. */
+  public getWavesStrings() {
+    return stringProperties.waves;
+  }
+
+  /** User-facing labels for the Interferometer screen. */
+  public getInterferometerStrings() {
+    return stringProperties.interferometer;
+  }
+
   /**
    * Simulation-specific preference labels shown in Preferences → Simulation.
    */

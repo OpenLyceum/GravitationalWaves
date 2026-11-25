@@ -28,7 +28,9 @@ export function armLengths(
   const half = 0.5 * hDet;
   const lx = L * (1 + half);
   const ly = L * (1 - half);
-  return { lx, ly, deltaL: lx - ly };
+  // ΔL = h_det L exactly — do not use lx−ly; at LIGO-scale h (~10⁻²¹) that
+  // difference underflows to 0 in IEEE-754 double (ulp at 4 km is ~10⁻¹² m).
+  return { lx, ly, deltaL: hDet * L };
 }
 
 /** Round-trip phase difference Δφ = 4π N ΔL / λ. */
