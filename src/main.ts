@@ -61,6 +61,10 @@ onReadyToLaunch(() => {
         // Enables keyboard-navigation highlight outlines
         supportsInteractiveHighlights: true,
       },
+      audioOptions: {
+        // Initializes tambo; pair with supportsSound in init.ts
+        supportsSound: true,
+      },
       simulationOptions: {
         customPreferences: [
           {

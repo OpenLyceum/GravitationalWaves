@@ -238,13 +238,17 @@ signal uses the stationary-phase phase
 \[
 \text{match}(\mathcal M,\mathcal M') =
 \max_{\Delta t}\;
-\frac{\left|\displaystyle\int \frac{f^{-7/3}}{h_n^2}\,
+\frac{\left|\displaystyle\int_{f_\text{low}}^{\min(f_\text{ISCO},f'_\text{ISCO})} \frac{f^{-7/3}}{h_n^2}\,
 e^{\,i[\Psi(f;\mathcal M) - \Psi(f;\mathcal M') + 2\pi f\Delta t]}\,df\right|}
-{\displaystyle\int \frac{f^{-7/3}}{h_n^2}\,df},
+{\sqrt{\displaystyle\int_{f_\text{low}}^{f_\text{ISCO}} \frac{f^{-7/3}}{h_n^2}\,df\;
+\int_{f_\text{low}}^{f'_\text{ISCO}} \frac{f^{-7/3}}{h_n^2}\,df}},
 \]
 
 taken over \(\Delta t\in[-0.2, 0.2]\) s in 0.5 ms steps (the absolute value maximizes over
-phase). The upper limit is the smaller of the two ISCO frequencies. The *recovered SNR*
+phase). The overlap runs only where both waveforms exist, while each waveform is
+normalized over its own band, so a heavy template that ends at a low ISCO frequency
+cannot match a lighter signal by ignoring its late inspiral. Templates are equal-mass in
+the scan. The *recovered SNR*
 is \(\rho = \rho_\text{opt}\times\text{match}\). A best-fit button scans a grid of
 template chirp masses and shows the SNR-vs-\(\mathcal M'\) curve: the peak lands on the
 true chirp mass. At leading order only \(\mathcal M\) is measurable from the phase;

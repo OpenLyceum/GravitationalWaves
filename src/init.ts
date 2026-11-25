@@ -45,4 +45,7 @@ init({
   // Enables the "Projector Mode" color profile alongside the default dark theme.
   // Required when supportsProjectorMode: true is used in PreferencesModel (src/main.ts).
   colorProfiles: ["default", "projector"],
+
+  // Chirp screen plays a one-shot Web Audio chirp; pair with audioOptions in main.ts.
+  supportsSound: true,
 });

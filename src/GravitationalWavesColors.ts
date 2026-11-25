@@ -207,6 +207,98 @@ const GravitationalWavesColors = {
     default: "rgba(79,195,247,0.18)",
     projector: "rgba(2,119,189,0.18)",
   }),
+
+  // ── Chirp screen ─────────────────────────────────────────────────────────────
+
+  /** Model / signal strain and whitened-signal traces. */
+  chirpSignalColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "chirpSignal", {
+    default: "#4fc3f7",
+    projector: "#0277bd",
+  }),
+
+  /** Whitened detector noise (grey). */
+  chirpNoiseColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "chirpNoise", {
+    default: "#90a4ae",
+    projector: "#607d8b",
+  }),
+
+  /** Matched-filter template overlay. */
+  chirpTemplateColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "chirpTemplate", {
+    default: "#ffd54f",
+    projector: "#f9a825",
+  }),
+
+  /** Real-event H1 whitened data. */
+  chirpH1ColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "chirpH1", {
+    default: "#ef9a9a",
+    projector: "#c62828",
+  }),
+
+  /** Real-event L1 whitened data. */
+  chirpL1ColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "chirpL1", {
+    default: "#ce93d8",
+    projector: "#7b1fa2",
+  }),
+
+  /** Playhead cursor across Chirp plots. */
+  chirpPlayheadColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "chirpPlayhead", {
+    default: "#ffffff",
+    projector: "#212121",
+  }),
+
+  /** Frequency track on the spectrogram. */
+  chirpFrequencyTrackColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "chirpFrequencyTrack", {
+    default: "#ffffff",
+    projector: "#000000",
+  }),
+
+  /** SNR-scan curve. */
+  chirpSnrScanColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "chirpSnrScan", {
+    default: "#81c784",
+    projector: "#2e7d32",
+  }),
+
+  /** True-chirp-mass marker on the SNR scan. */
+  chirpTrueMcColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "chirpTrueMc", {
+    default: "#ff8a65",
+    projector: "#e64a19",
+  }),
+
+  /** “Detected!” badge fill. */
+  chirpDetectedColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "chirpDetected", {
+    default: "#66bb6a",
+    projector: "#2e7d32",
+  }),
+
+  /** “Below threshold” badge fill. */
+  chirpBelowThresholdColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "chirpBelowThreshold", {
+    default: "#ef5350",
+    projector: "#c62828",
+  }),
+
+  /** Text on detection badges (on saturated fills). */
+  chirpBadgeTextColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "chirpBadgeText", {
+    default: "#ffffff",
+    projector: "#ffffff",
+  }),
+
+  /** Spectrogram colour-map low (quiet). */
+  spectrogramLowColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "spectrogramLow", {
+    default: "#0d1b2a",
+    projector: "#fafafa",
+  }),
+
+  /** Spectrogram colour-map mid. */
+  spectrogramMidColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "spectrogramMid", {
+    default: "#1565c0",
+    projector: "#42a5f5",
+  }),
+
+  /** Spectrogram colour-map high (loud). */
+  spectrogramHighColorProperty: new ProfileColorProperty(GravitationalWavesNamespace, "spectrogramHigh", {
+    default: "#ffeb3b",
+    projector: "#f57f17",
+  }),
 };
 
 export default GravitationalWavesColors;

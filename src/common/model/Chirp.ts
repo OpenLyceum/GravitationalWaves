@@ -31,7 +31,7 @@ function chirpTime(mcSolar: number): number {
  * Instantaneous GW frequency at Newtonian time-to-coalescence τ (s):
  * f(τ) = (1/π) (5/(256 τ))^{3/8} T_ℳ^{-5/8}.
  */
-export function gwFrequency(tau: number, mcSolar: number): number {
+function gwFrequency(tau: number, mcSolar: number): number {
   if (!(tau > 0)) {
     return Number.POSITIVE_INFINITY;
   }
@@ -42,7 +42,7 @@ export function gwFrequency(tau: number, mcSolar: number): number {
 /**
  * GW phase Φ(τ) = −2 (τ / (5 T_ℳ))^{5/8} with Φ_c = 0.
  */
-export function gwPhase(tau: number, mcSolar: number): number {
+function gwPhase(tau: number, mcSolar: number): number {
   if (!(tau > 0)) {
     return 0;
   }
@@ -53,7 +53,7 @@ export function gwPhase(tau: number, mcSolar: number): number {
 /**
  * Strain amplitude A(τ) = (4c/D) T_ℳ^{5/3} (π f(τ))^{2/3} for an optimally oriented source.
  */
-export function amplitude(tau: number, mcSolar: number, distanceMpc: number): number {
+function amplitude(tau: number, mcSolar: number, distanceMpc: number): number {
   const freq = gwFrequency(tau, mcSolar);
   if (!Number.isFinite(freq)) {
     return 0;

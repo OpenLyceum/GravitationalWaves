@@ -6,13 +6,17 @@ import { Dimension2, Range, toFixed } from "scenerystack/dot";
 import { NumberControl, type NumberControlOptions } from "scenerystack/scenery-phet";
 import GravitationalWavesColors from "../../GravitationalWavesColors.js";
 import { FLAT_RECTANGULAR_BUTTON_OPTIONS } from "../GravitationalWavesButtonOptions.js";
-import { LABEL_FONT, SMALL_FONT } from "./GravitationalWavesFonts.js";
+import { LABEL_FONT } from "./GravitationalWavesFonts.js";
 
 const SLIDER_TRACK = new Dimension2(140, 4);
 const SLIDER_THUMB = new Dimension2(12, 22);
+const CHIRP_SLIDER_TRACK = new Dimension2(110, 4);
 
 /** Wide enough for scientific RichText values like "1.0 × 10<sup>−21</sup>". */
 const NUMBER_DISPLAY_MIN_WIDTH = 118;
+
+/** Compact enough for "100.0 M☉" / "5000 Mpc" on the Chirp panels. */
+const CHIRP_NUMBER_DISPLAY_MIN_WIDTH = 72;
 
 /** Shared chrome so NumberControl titles/readouts stay readable on dark panels. */
 export function panelNumberControlOptions(
@@ -31,7 +35,7 @@ export function panelNumberControlOptions(
       ...(valuePattern ? { valuePattern } : {}),
       minBackgroundWidth: NUMBER_DISPLAY_MIN_WIDTH,
       textOptions: {
-        font: SMALL_FONT,
+        font: LABEL_FONT,
         fill: GravitationalWavesColors.controlSurfaceTextColorProperty,
       },
       backgroundFill: GravitationalWavesColors.controlSurfaceColorProperty,
@@ -42,6 +46,30 @@ export function panelNumberControlOptions(
       thumbSize: SLIDER_THUMB,
     },
     arrowButtonOptions: { ...FLAT_RECTANGULAR_BUTTON_OPTIONS },
+  };
+}
+
+/** Chirp-panel NumberControl chrome: shorter track, value box sized to content. */
+export function chirpNumberControlOptions(
+  valuePattern?: TReadOnlyProperty<string>,
+  decimalPlaces = 2,
+): NumberControlOptions {
+  const base = panelNumberControlOptions(valuePattern, decimalPlaces);
+  return {
+    ...base,
+    titleNodeOptions: {
+      ...base.titleNodeOptions,
+      maxWidth: 160,
+    },
+    numberDisplayOptions: {
+      ...base.numberDisplayOptions,
+      minBackgroundWidth: CHIRP_NUMBER_DISPLAY_MIN_WIDTH,
+    },
+    sliderOptions: {
+      ...base.sliderOptions,
+      trackSize: CHIRP_SLIDER_TRACK,
+      thumbSize: SLIDER_THUMB,
+    },
   };
 }
 
@@ -57,6 +85,7 @@ export function createLogNumberControl(
   options?: {
     readonly decimalPlaces?: number;
     readonly accessibleName?: TReadOnlyProperty<string>;
+    readonly compact?: boolean;
   },
 ): { readonly control: NumberControl; readonly dispose: () => void } {
   const decimals = options?.decimalPlaces ?? 2;
@@ -80,7 +109,9 @@ export function createLogNumberControl(
   property.lazyLink(onModel);
   logProperty.lazyLink(onLog);
 
-  const base = panelNumberControlOptions(valuePattern, decimals);
+  const base = options?.compact
+    ? chirpNumberControlOptions(valuePattern, decimals)
+    : panelNumberControlOptions(valuePattern, decimals);
   const controlOptions: NumberControlOptions = {
     ...base,
     delta: logRange.getLength() / 100,

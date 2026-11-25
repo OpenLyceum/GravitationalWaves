@@ -76,6 +76,55 @@
     "controlsTitle": "Controls",
     "readoutsTitle": "Readouts"
   },
+  "chirp": {
+    "source": "Source",
+    "custom": "Custom",
+    "eventOption": "{{name}} · {{catalog}} · {{distance}} Mpc",
+    "gwoscCredit": "Data: GWOSC, LIGO/Virgo/KAGRA, CC BY 4.0",
+    "mass1": "Mass 1",
+    "mass2": "Mass 2",
+    "massPattern": "{{value}} M☉",
+    "distance": "Distance",
+    "distancePattern": "{{value}} Mpc",
+    "waveformTitle": "Strain h(t)  [10⁻²¹]",
+    "waveformYAxis": "h",
+    "waveformXAxis": "time before merger (s)",
+    "shapeOnly": "shape only",
+    "showL1": "Show L1",
+    "whitenedTitle": "Whitened detector output d(t)",
+    "showHiddenSignal": "Hidden signal",
+    "showTemplate": "Template",
+    "spectrogramTitle": "Spectrogram",
+    "spectrogramFreqAxis": "Frequency (Hz)",
+    "spectrogramKey": "quiet → loud",
+    "showFrequencyTrack": "Model f(t)",
+    "readoutsTitle": "Readouts",
+    "chirpMass": "Chirp mass ℳ",
+    "chirpMassValue": "{{value}} M☉",
+    "timeInBand": "Time in band",
+    "timeInBandValue": "{{value}} s",
+    "fIsco": "f_ISCO",
+    "fIscoValue": "{{value}} Hz",
+    "optimalSnr": "Optimal SNR",
+    "optimalSnrValue": "{{value}}",
+    "recoveredSnr": "Recovered SNR",
+    "recoveredSnrValue": "{{value}}",
+    "catalogSnr": "Catalog network SNR {{value}}",
+    "snrNote": "Toy detector is more sensitive than LIGO in 2015",
+    "detected": "Detected!",
+    "belowThreshold": "Below threshold",
+    "matchedFilterTitle": "Matched filter",
+    "templateMass1": "Template m₁′",
+    "templateMass2": "Template m₂′",
+    "scanTemplates": "Scan templates",
+    "newNoise": "New noise",
+    "playChirp": "Play chirp",
+    "snrScanTitle": "SNR vs template chirp mass",
+    "snrScanXAxis": "ℳ′ (M☉)",
+    "snrScanYAxis": "SNR",
+    "matchNote": "Phase reveals chirp mass, not the individual masses.",
+    "controlsTitle": "Controls"
+  },
   "a11y": {
     "waves": {
       "screenSummary": {
@@ -119,11 +168,28 @@
     },
     "chirp": {
       "screenSummary": {
-        "playArea": "The play area shows the main simulation content.",
-        "controlArea": "The control area has a Reset All button that returns the simulation to its starting state.",
-        "interactionHint": "Explore the simulation by interacting with its controls."
+        "playArea": "Plots show the chirp strain, whitened detector output with noise, and a spectrogram. Real GWOSC events can be overlaid.",
+        "controlArea": "Controls set source masses and distance, matched-filter templates, display toggles, playback, and Reset All.",
+        "interactionHint": "Choose a catalog event or adjust masses, then scan templates to see how chirp mass sets the match."
       },
-      "currentDetails": "The simulation is in its initial state."
+      "currentDetails": "Source {{source}}, ℳ {{chirpMass}} M☉, optimal SNR {{optimalSnr}}, recovered SNR {{recoveredSnr}}.",
+      "controls": {
+        "source": "Signal source",
+        "mass1": "Primary mass",
+        "mass2": "Secondary mass",
+        "distance": "Luminosity distance",
+        "templateMass1": "Template primary mass",
+        "templateMass2": "Template secondary mass",
+        "showL1": "Show Livingston data",
+        "showHiddenSignal": "Show hidden whitened signal",
+        "showTemplate": "Show matched-filter template",
+        "showFrequencyTrack": "Show model frequency track",
+        "scanTemplates": "Scan template chirp masses",
+        "newNoise": "Draw new noise realization",
+        "playChirp": "Play chirp audio",
+        "timeControl": "Play, pause, and step",
+        "resetAll": "Reset All"
+      }
     }
   },
   "preferences": {

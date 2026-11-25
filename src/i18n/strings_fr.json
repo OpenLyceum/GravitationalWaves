@@ -76,6 +76,55 @@
     "controlsTitle": "Commandes",
     "readoutsTitle": "Lectures"
   },
+  "chirp": {
+    "source": "Source",
+    "custom": "Personnalisé",
+    "eventOption": "{{name}} · {{catalog}} · {{distance}} Mpc",
+    "gwoscCredit": "Données : GWOSC, LIGO/Virgo/KAGRA, CC BY 4.0",
+    "mass1": "Masse 1",
+    "mass2": "Masse 2",
+    "massPattern": "{{value}} M☉",
+    "distance": "Distance",
+    "distancePattern": "{{value}} Mpc",
+    "waveformTitle": "Déformation h(t)  [10⁻²¹]",
+    "waveformYAxis": "h",
+    "waveformXAxis": "temps avant la fusion (s)",
+    "shapeOnly": "forme seulement",
+    "showL1": "Afficher L1",
+    "whitenedTitle": "Sortie blanchie du détecteur d(t)",
+    "showHiddenSignal": "Signal caché",
+    "showTemplate": "Modèle",
+    "spectrogramTitle": "Spectrogramme",
+    "spectrogramFreqAxis": "Fréquence (Hz)",
+    "spectrogramKey": "faible → fort",
+    "showFrequencyTrack": "Modèle f(t)",
+    "readoutsTitle": "Lectures",
+    "chirpMass": "Masse de chirp ℳ",
+    "chirpMassValue": "{{value}} M☉",
+    "timeInBand": "Temps dans la bande",
+    "timeInBandValue": "{{value}} s",
+    "fIsco": "f_ISCO",
+    "fIscoValue": "{{value}} Hz",
+    "optimalSnr": "SNR optimale",
+    "optimalSnrValue": "{{value}}",
+    "recoveredSnr": "SNR récupérée",
+    "recoveredSnrValue": "{{value}}",
+    "catalogSnr": "SNR réseau du catalogue {{value}}",
+    "snrNote": "Le détecteur jouet est plus sensible que LIGO en 2015",
+    "detected": "Détecté !",
+    "belowThreshold": "Sous le seuil",
+    "matchedFilterTitle": "Filtre adapté",
+    "templateMass1": "Modèle m₁′",
+    "templateMass2": "Modèle m₂′",
+    "scanTemplates": "Balayer les modèles",
+    "newNoise": "Nouveau bruit",
+    "playChirp": "Jouer le chirp",
+    "snrScanTitle": "SNR selon la masse de chirp du modèle",
+    "snrScanXAxis": "ℳ′ (M☉)",
+    "snrScanYAxis": "SNR",
+    "matchNote": "La phase révèle la masse de chirp, pas les masses individuelles.",
+    "controlsTitle": "Commandes"
+  },
   "a11y": {
     "waves": {
       "screenSummary": {
@@ -119,11 +168,28 @@
     },
     "chirp": {
       "screenSummary": {
-        "playArea": "La zone de jeu montre le contenu principal de la simulation.",
-        "controlArea": "La zone de commande a un bouton Tout réinitialiser qui ramène la simulation à son état initial.",
-        "interactionHint": "Explorez la simulation en interagissant avec ses commandes."
+        "playArea": "Les graphiques montrent la déformation du chirp, la sortie blanchie du détecteur avec bruit et un spectrogramme. Des événements GWOSC réels peuvent être superposés.",
+        "controlArea": "Les commandes fixent les masses et la distance, les modèles du filtre adapté, les options d’affichage, la lecture et Tout réinitialiser.",
+        "interactionHint": "Choisissez un événement du catalogue ou ajustez les masses, puis balayez les modèles pour voir comment la masse de chirp fixe l’accord."
       },
-      "currentDetails": "La simulation est dans son état initial."
+      "currentDetails": "Source {{source}}, ℳ {{chirpMass}} M☉, SNR optimale {{optimalSnr}}, SNR récupérée {{recoveredSnr}}.",
+      "controls": {
+        "source": "Source du signal",
+        "mass1": "Masse primaire",
+        "mass2": "Masse secondaire",
+        "distance": "Distance de luminosité",
+        "templateMass1": "Masse primaire du modèle",
+        "templateMass2": "Masse secondaire du modèle",
+        "showL1": "Afficher les données de Livingston",
+        "showHiddenSignal": "Afficher le signal blanchi caché",
+        "showTemplate": "Afficher le modèle du filtre adapté",
+        "showFrequencyTrack": "Afficher la trajectoire de fréquence du modèle",
+        "scanTemplates": "Balayer les masses de chirp des modèles",
+        "newNoise": "Tirer une nouvelle réalisation de bruit",
+        "playChirp": "Jouer l’audio du chirp",
+        "timeControl": "Lecture, pause et pas à pas",
+        "resetAll": "Tout réinitialiser"
+      }
     }
   },
   "preferences": {

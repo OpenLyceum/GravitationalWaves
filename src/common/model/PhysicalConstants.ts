@@ -5,13 +5,13 @@
  */
 
 /** Newton's gravitational constant (m³ kg⁻¹ s⁻²). */
-export const G = 6.6743e-11;
+const G = 6.6743e-11;
 
 /** Speed of light (m/s). */
 export const C = 2.99792458e8;
 
 /** Solar mass (kg). */
-export const M_SUN = 1.98841e30;
+const M_SUN = 1.98841e30;
 
 /** G·M_☉/c³ (s) — convenient time unit for binary waveforms. */
 export const T_SUN = (G * M_SUN) / C ** 3;

@@ -1,12 +1,5 @@
 import { expect, it } from "vitest";
-import {
-  amplitude,
-  chirpMass,
-  generateWaveform,
-  gwFrequency,
-  iscoFrequency,
-  timeInBand,
-} from "../src/common/model/Chirp.js";
+import { chirpMass, generateWaveform, iscoFrequency, timeInBand } from "../src/common/model/Chirp.js";
 
 it("chirpMass for equal 30 M☉ binaries", () => {
   expect(chirpMass(30, 30)).toBeCloseTo(26.12, 2);
@@ -16,13 +9,11 @@ it("chirpMass for equal 1.4 M☉ binaries", () => {
   expect(chirpMass(1.4, 1.4)).toBeCloseTo(1.219, 3);
 });
 
-it("gwFrequency increases as tau → 0", () => {
-  const mc = chirpMass(30, 30);
-  const fFar = gwFrequency(1.0, mc);
-  const fNear = gwFrequency(0.1, mc);
-  const fCloser = gwFrequency(0.01, mc);
-  expect(fNear).toBeGreaterThan(fFar);
-  expect(fCloser).toBeGreaterThan(fNear);
+it("gw frequency increases as the waveform approaches merger", () => {
+  const w = generateWaveform({ m1: 30, m2: 30, distanceMpc: 400, sampleRate: 2048, duration: 0.5 });
+  const early = Math.floor(w.mergerIndex * 0.2);
+  const late = Math.max(0, w.mergerIndex - 5);
+  expect(w.f[late] ?? 0).toBeGreaterThan(w.f[early] ?? 0);
 });
 
 it("timeInBand(20 Hz) for 1.219 M☉ chirp mass is 150–200 s", () => {
@@ -31,14 +22,34 @@ it("timeInBand(20 Hz) for 1.219 M☉ chirp mass is 150–200 s", () => {
   expect(tau).toBeLessThan(200);
 });
 
-it("amplitude at f=100 Hz for 30+30 at 400 Mpc is in [5e-22, 3e-21]", () => {
+it("strain envelope at f≈100 Hz for 30+30 at 400 Mpc is in [5e-22, 3e-21]", () => {
   const mc = chirpMass(30, 30);
-  // Invert f(τ)=100 ⇒ τ = timeInBand(100, mc).
   const tau = timeInBand(100, mc);
-  expect(gwFrequency(tau, mc)).toBeCloseTo(100, 0);
-  const a = amplitude(tau, mc, 400);
-  expect(a).toBeGreaterThanOrEqual(5e-22);
-  expect(a).toBeLessThanOrEqual(3e-21);
+  const w = generateWaveform({
+    m1: 30,
+    m2: 30,
+    distanceMpc: 400,
+    sampleRate: 2048,
+    duration: Math.min(2, tau + 0.2),
+  });
+  let bestI = 0;
+  let bestDf = Number.POSITIVE_INFINITY;
+  for (let i = 0; i < w.mergerIndex; i++) {
+    const df = Math.abs((w.f[i] ?? 0) - 100);
+    if (df < bestDf) {
+      bestDf = df;
+      bestI = i;
+    }
+  }
+  // Take the local peak of |h| so the cos(Φ) phase does not understate the envelope.
+  let peak = 0;
+  const lo = Math.max(0, bestI - 40);
+  const hi = Math.min(w.mergerIndex, bestI + 40);
+  for (let i = lo; i < hi; i++) {
+    peak = Math.max(peak, Math.abs(w.h[i] ?? 0));
+  }
+  expect(peak).toBeGreaterThanOrEqual(5e-22);
+  expect(peak).toBeLessThanOrEqual(3e-21);
 });
 
 it("iscoFrequency(60) ≈ 73.3 Hz", () => {

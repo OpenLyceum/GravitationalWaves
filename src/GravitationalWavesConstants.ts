@@ -33,11 +33,23 @@ export const PANEL_CORNER_RADIUS = 6;
 /** Vertical spacing inside control panels. */
 export const PANEL_SPACING = 8;
 
-/** Control-panel column width on both Phase-2 screens. */
+/** Control-panel column width on Phase-2/3 screens. */
 export const CONTROL_PANEL_WIDTH = 240;
+
+/** Chirp control / matched-filter panel width (never scale panels below 1). */
+export const CHIRP_PANEL_WIDTH = 240;
+
+/** Chirp bottom-row readout panel width. */
+export const CHIRP_READOUTS_WIDTH = 280;
+
+/** Chirp matched-filter panel width (fits 260×110 SNR chart). */
+export const CHIRP_MATCHED_WIDTH = 300;
 
 /** Font size for body labels. */
 export const LABEL_FONT_SIZE = 14;
+
+/** Font size for numeric readout values. */
+export const VALUE_FONT_SIZE = 15;
 
 /** Font size for titles / section headers. */
 export const TITLE_FONT_SIZE = 16;
@@ -169,6 +181,69 @@ export const TIME_SPEED_MULTIPLIERS: ReadonlyMap<TimeSpeed, number> = new Map([
 /** Manual step size for TimeControlNode step-forward (sim seconds at 60 fps). */
 export const STEP_DT = 1 / 60;
 
+// ── Chirp screen ──────────────────────────────────────────────────────────────
+
+/**
+ * Root-mean-square sky-and-orientation factor ⟨F⟩ = 2/5 applied to every Chirp
+ * amplitude and SNR (doc/model.md).
+ */
+export const ORIENTATION_FACTOR = 0.4;
+
+/** Component mass range (M☉). */
+export const CHIRP_MASS_RANGE = new Range(1, 100);
+
+/** Default component masses (M☉) — GW150914-like. */
+export const CHIRP_M1_DEFAULT = 36;
+export const CHIRP_M2_DEFAULT = 29;
+
+/** Luminosity distance range (Mpc, log-spaced control). */
+export const CHIRP_DISTANCE_RANGE = new Range(10, 5000);
+
+/** Default luminosity distance (Mpc). */
+export const CHIRP_DISTANCE_DEFAULT = 450;
+
+/** Default template masses (M☉). */
+export const CHIRP_TEMPLATE_M1_DEFAULT = 20;
+export const CHIRP_TEMPLATE_M2_DEFAULT = 20;
+
+/** Waveform / whitening sample rate (Hz). */
+export const CHIRP_SAMPLE_RATE = 2048;
+
+/** Low-frequency cutoff for time-in-band and SNR integrals (Hz). */
+export const CHIRP_F_LOW = 20;
+
+/** Cap displayed / generated inspiral duration (s); BNS shows the last 8 s. */
+export const CHIRP_MAX_DURATION_S = 8;
+
+/** Default PRNG seed for whitened noise. */
+export const CHIRP_NOISE_SEED_DEFAULT = 1;
+
+/** SNR-scan template chirp-mass bounds (M☉). */
+export const CHIRP_SNR_SCAN_MIN_MC = 0.8;
+export const CHIRP_SNR_SCAN_MAX_MC = 90;
+
+/** Log-spaced SNR-scan template count. */
+export const CHIRP_SNR_SCAN_TEMPLATES = 120;
+
+/** Spectrogram frequency axis (Hz). */
+export const CHIRP_SPECTROGRAM_F_MIN = 20;
+export const CHIRP_SPECTROGRAM_F_MAX = 500;
+
+/** Short-time FFT length for the spectrogram (samples). */
+export const CHIRP_SPECTROGRAM_FFT = 128;
+
+/** Hann-window hop as a fraction of the FFT length (87.5 % overlap ⇒ hop = 0.125). */
+export const CHIRP_SPECTROGRAM_HOP_FRACTION = 0.125;
+
+/** Detection threshold on recovered SNR. */
+export const CHIRP_DETECTION_SNR = 8;
+
+/** Audio pitch-up factor (one octave) via buffer sample-rate doubling. */
+export const CHIRP_AUDIO_PITCH_FACTOR = 2;
+
+/** Fade in/out for chirp audio playback (seconds of audio time). */
+export const CHIRP_AUDIO_FADE_S = 0.02;
+
 GravitationalWavesNamespace.register("GravitationalWavesConstants", {
   SCREEN_VIEW_MARGIN,
   PANEL_CORNER_RADIUS,
@@ -183,4 +258,9 @@ GravitationalWavesNamespace.register("GravitationalWavesConstants", {
   INTERFEROMETER_STRAIN_AMPLITUDE,
   INTERFEROMETER_WAVE_FREQUENCY,
   INTERFEROMETER_EXAGGERATION,
+  ORIENTATION_FACTOR,
+  CHIRP_M1_DEFAULT,
+  CHIRP_M2_DEFAULT,
+  CHIRP_DISTANCE_DEFAULT,
+  CHIRP_SAMPLE_RATE,
 });

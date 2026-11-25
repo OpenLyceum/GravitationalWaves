@@ -13,7 +13,7 @@ function chirpTime(mcSolar: number): number {
 }
 
 /** Stationary-phase Fourier amplitude |h̃(f)|. */
-export function stationaryPhaseAmplitude(f: number, mcSolar: number, distanceMpc: number): number {
+function stationaryPhaseAmplitude(f: number, mcSolar: number, distanceMpc: number): number {
   const tMc = chirpTime(mcSolar);
   const D = distanceMpc * MPC;
   return Math.sqrt(5 / 24) * Math.PI ** (-2 / 3) * (C / D) * tMc ** (5 / 6) * f ** (-7 / 6);
@@ -63,11 +63,8 @@ export function optimalSnr(
   return Math.sqrt(4 * trapz(freqs, integrand));
 }
 
-/**
- * Match between signal chirp mass and template, maximized over coalescence-time
- * offset Δt ∈ [−0.2, 0.2] s at 0.5 ms steps. Uses a ~300-point log frequency grid.
- */
-export function match(mc: number, mcTemplate: number, fUpper: number, asd: (f: number) => number, fLow = 20): number {
+/** Noise-weighted norm ∫_{fLow}^{fUpper} f^{-7/3} / h_n² df of a leading-order inspiral (amplitude dropped). */
+function inspiralNorm(fUpper: number, asd: (f: number) => number, fLow: number): number {
   if (!(fUpper > fLow)) {
     return 0;
   }
@@ -78,15 +75,41 @@ export function match(mc: number, mcTemplate: number, fUpper: number, asd: (f: n
     const hn = asd(f);
     weight[i] = f ** (-7 / 3) / (hn * hn);
   }
-  // Trapezoid of the weight for the denominator ∫ f^{-7/3}/h_n² df.
-  const denom = trapz(freqs, weight);
+  return trapz(freqs, weight);
+}
+
+/**
+ * Normalized match between a signal (chirp mass `mc`, ending at `fUpperSignal`) and a
+ * template (`mcTemplate`, ending at `fUpperTemplate`), maximized over coalescence-time
+ * offset Δt ∈ [−0.2, 0.2] s at 0.5 ms steps and over phase (absolute value).
+ *
+ * The overlap is integrated where both waveforms exist (up to the smaller ISCO); the
+ * normalization uses each waveform's own full norm, so a template that ends early is
+ * penalized for the signal power it cannot cover. Uses a ~300-point log frequency grid.
+ */
+export function match(
+  mc: number,
+  mcTemplate: number,
+  fUpperSignal: number,
+  fUpperTemplate: number,
+  asd: (f: number) => number,
+  fLow = 20,
+): number {
+  const fUpper = Math.min(fUpperSignal, fUpperTemplate);
+  if (!(fUpper > fLow)) {
+    return 0;
+  }
+  const denom = Math.sqrt(inspiralNorm(fUpperSignal, asd, fLow) * inspiralNorm(fUpperTemplate, asd, fLow));
   if (!(denom > 0)) {
     return 0;
   }
-
+  const freqs = logFrequencyGrid(fLow, fUpper, 300);
+  const weight = new Float64Array(freqs.length);
   const phaseDiff = new Float64Array(freqs.length);
   for (let i = 0; i < freqs.length; i++) {
     const f = freqs[i] ?? fLow;
+    const hn = asd(f);
+    weight[i] = f ** (-7 / 3) / (hn * hn);
     phaseDiff[i] = stationaryPhase(f, mc) - stationaryPhase(f, mcTemplate);
   }
 
@@ -147,8 +170,7 @@ export function snrScan(
     mcTemplate[i] = mcT;
     // Equal-mass: ℳ = (1/4)^{3/5} M ⇒ M = ℳ · 4^{3/5}.
     const totalTemplate = mcT * 4 ** 0.6;
-    const fUpper = Math.min(fIsco, iscoFrequency(totalTemplate));
-    snr[i] = rhoOpt * match(mcSolar, mcT, fUpper, asd, fLow);
+    snr[i] = rhoOpt * match(mcSolar, mcT, fIsco, iscoFrequency(totalTemplate), asd, fLow);
   }
   return { mcTemplate, snr };
 }

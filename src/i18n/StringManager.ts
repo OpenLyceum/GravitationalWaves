@@ -113,6 +113,11 @@ export class StringManager {
     return stringProperties.interferometer;
   }
 
+  /** User-facing labels for the Chirp screen. */
+  public getChirpStrings() {
+    return stringProperties.chirp;
+  }
+
   /**
    * Simulation-specific preference labels shown in Preferences → Simulation.
    */

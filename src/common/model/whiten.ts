@@ -31,7 +31,7 @@ export function whitenedSignal(
  * Mulberry32 PRNG plus Box–Muller Gaussian draws. Used so detector noise is
  * reproducible across runs (no Math.random).
  */
-export class SeededRandom {
+class SeededRandom {
   private state: number;
   private spare: number | null = null;
 
