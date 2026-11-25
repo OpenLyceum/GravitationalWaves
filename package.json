@@ -2,7 +2,7 @@
   "name": "gravitational-waves",
   "version": "0.0.0",
   "private": true,
-  "description": "Watch a gravitational wave stretch space, measure it with a laser interferometer, and dig a black-hole chirp out of detector noise.",
+  "description": "Watch a gravitational wave stretch space, measure it with a laser interferometer, dig a black-hole chirp out of detector noise, and locate the source on the sky with a detector network.",
   "keywords": [
     "simulation",
     "SceneryStack",
