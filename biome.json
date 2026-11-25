@@ -9,7 +9,16 @@
     }
   },
   "files": {
-    "includes": ["**/*.ts", "**/*.js", "**/*.json", "**/*.html", "!dist", "!node_modules", "!.claude"]
+    "includes": [
+      "**/*.ts",
+      "**/*.js",
+      "**/*.json",
+      "**/*.html",
+      "!dist",
+      "!node_modules",
+      "!.claude",
+      "!src/common/data/generated"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -201,10 +210,12 @@
             "useExplicitType": "off"
           },
           "style": {
-            "noCommonJs": "off"
+            "noCommonJs": "off",
+            "noNonNullAssertion": "off"
           },
           "suspicious": {
-            "noConsole": "off"
+            "noConsole": "off",
+            "noEvolvingTypes": "off"
           }
         }
       }

@@ -168,7 +168,12 @@ h(t) &= A(\tau)\cos\Phi(\tau),
 \end{aligned}
 \]
 
-for an optimally oriented source at luminosity distance \(D\). The time the signal spends
+for an optimally oriented source at luminosity distance \(D\). The Chirp screen
+multiplies every amplitude (and hence the SNR) by the root-mean-square
+sky-and-orientation factor \(\langle F\rangle = 2/5\), so a preset at its catalog
+distance gives an SNR of the same order as the real detection rather than the
+best case. The toy noise curve is more sensitive than LIGO was in 2015, so model
+SNRs still run somewhat high; the sim says so next to the catalog SNR. The time the signal spends
 above a frequency \(f\) (time in band, quoted for \(f = 20\) Hz) is
 
 \[
@@ -218,7 +223,7 @@ Using the stationary-phase Fourier amplitude of the inspiral,
 \rho_\text{opt}^2 = 4\int_{f_\text{low}}^{f_\text{ISCO}} \frac{|\tilde h(f)|^2}{h_n(f)^2}\,df,
 \]
 
-with \(f_\text{low} = 20\) Hz, evaluated numerically on a log grid. A detection needs
+with \(f_\text{low} = 20\) Hz, evaluated numerically on a log grid. The 2/5 orientation factor multiplies \(\rho_\text{opt}\). A detection needs
 \(\rho \gtrsim 8\).
 
 ### Matched filtering

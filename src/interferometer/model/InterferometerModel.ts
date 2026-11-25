@@ -1,52 +1,64 @@
 /**
  * InterferometerModel.ts
  *
- * The top-level model for the simulation screen.
- *
- * Add your simulation's state here using reactive Property objects from
- * scenerystack/axon. The view observes these properties and updates automatically.
- *
- * ── Example ──────────────────────────────────────────────────────────────────
- *   import { BooleanProperty, NumberProperty } from "scenerystack/axon";
- *
- *   public readonly isRunningProperty = new BooleanProperty(false);
- *   public readonly timeProperty = new NumberProperty(0);    // seconds
- *
- * ── Step cycle ────────────────────────────────────────────────────────────────
- * The Sim calls step(dt) on every animation frame. Advance your model state
- * in that method (e.g. integrate equations, update positions).
- *
- * ── Reset ─────────────────────────────────────────────────────────────────────
- * reset() is called when the user presses Reset All. Call .reset() on every
- * Property declared here.
+ * Screen model for the Interferometer screen. Phase 1 exposes antenna, arm, power,
+ * and toy-noise helpers; UI Properties land in later phases.
  */
 import type { TModel } from "scenerystack/joist";
+import { LIGO_H1_ASD } from "../../common/data/generated/ligoAsd.js";
+import { antennaPattern } from "../../common/model/AntennaPattern.js";
+import {
+  armLengths,
+  DC_OFFSET_PHASE,
+  FABRY_PEROT_GAIN,
+  outputPower,
+  phaseDifference,
+} from "../../common/model/Interferometer.js";
+import { logFrequencyGrid, totalAsd } from "../../common/model/NoiseModel.js";
 import { TimeModel } from "../../common/TimeModel.js";
 
 export class InterferometerModel implements TModel {
   public readonly timer = new TimeModel();
 
-  /**
-   * Resets all model state to initial values.
-   * Called when the user presses the Reset All button.
-   */
+  /** Real H1 ASD overlay (Welch of GW150914), for the sensitivity plot. */
+  public readonly ligoAsd = LIGO_H1_ASD;
+
+  public antennaPattern(theta: number, phi: number, psi: number): { readonly fPlus: number; readonly fCross: number } {
+    return antennaPattern(theta, phi, psi);
+  }
+
+  public armResponse(L: number, hDet: number): { readonly lx: number; readonly ly: number; readonly deltaL: number } {
+    return armLengths(L, hDet);
+  }
+
+  public photodetectorPower(Pin: number, deltaL: number, N: number = FABRY_PEROT_GAIN): number {
+    return outputPower(Pin, phaseDifference(deltaL, N), DC_OFFSET_PHASE);
+  }
+
+  /** Toy total ASD on a log grid (10 Hz–5 kHz). */
+  public toyAsdCurve(
+    L = 4000,
+    N: number = FABRY_PEROT_GAIN,
+    powerRatio = 1,
+  ): { readonly f: Float64Array; readonly asd: Float64Array } {
+    const f = logFrequencyGrid(10, 5000, 200);
+    const asd = new Float64Array(f.length);
+    const params = { L, N, powerRatio };
+    const enabled = { seismic: true, thermal: true, shot: true };
+    for (let i = 0; i < f.length; i++) {
+      asd[i] = totalAsd(f[i] ?? 10, params, enabled);
+    }
+    return { f, asd };
+  }
+
   public reset(): void {
     this.timer.reset();
-    // TODO: call .reset() on every Property declared in this model
   }
 
-  /**
-   * Steps the model forward by dt seconds.
-   * Called every animation frame by the Sim framework.
-   *
-   * @param dt - elapsed time in seconds since the last frame
-   */
   public step(dt: number): void {
     this.timer.step(dt);
-    // TODO: advance simulation state here
   }
 
-  /** Release owned Properties / composed models. */
   public dispose(): void {
     this.timer.dispose();
   }
