@@ -12,15 +12,17 @@
 
 import { StringProperty } from "scenerystack/axon";
 import { Tandem } from "scenerystack/tandem";
-// seed:soak-imports:start
-import SimColors from "../../src/SimColors.js";
-import { SimScreen } from "../../src/sim-screen/SimScreen.js";
-// seed:soak-imports:end
+import { ChirpScreen } from "../../src/chirp/ChirpScreen.js";
+import GravitationalWavesColors from "../../src/GravitationalWavesColors.js";
+import { InterferometerScreen } from "../../src/interferometer/InterferometerScreen.js";
+import { WavesScreen } from "../../src/waves/WavesScreen.js";
 import { describeHeadlessSoak } from "../helpers/headlessSoak.js";
 
 describeHeadlessSoak({
-  // seed:soak-screens:start
-  screens: () => [new SimScreen({ name: new StringProperty("Sim"), tandem: Tandem.OPT_OUT })],
-  tracked: () => ({ SimColors }),
-  // seed:soak-screens:end
+  screens: () => [
+    new WavesScreen({ name: new StringProperty("Waves"), tandem: Tandem.OPT_OUT }),
+    new InterferometerScreen({ name: new StringProperty("Interferometer"), tandem: Tandem.OPT_OUT }),
+    new ChirpScreen({ name: new StringProperty("Chirp"), tandem: Tandem.OPT_OUT }),
+  ],
+  tracked: () => ({ GravitationalWavesColors }),
 });

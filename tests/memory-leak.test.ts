@@ -9,11 +9,39 @@
  * tests below using forceGC().
  */
 
-// seed:leak-imports:start
+import { describe, expect, it, vi } from "vitest";
+import { ChirpModel } from "../src/chirp/model/ChirpModel.js";
 import { TimeModel } from "../src/common/TimeModel.js";
-// seed:leak-imports:end
+import { InterferometerModel } from "../src/interferometer/model/InterferometerModel.js";
+import { WavesModel } from "../src/waves/model/WavesModel.js";
 import { describeDisposalLeaks } from "./helpers/memoryLeak.js";
 
-// seed:leak-cases:start
-describeDisposalLeaks([{ name: "TimeModel", create: () => new TimeModel(), idempotentDispose: true }]);
-// seed:leak-cases:end
+describeDisposalLeaks([
+  { name: "TimeModel", create: () => new TimeModel(), idempotentDispose: true },
+  { name: "WavesModel", create: () => new WavesModel() },
+  { name: "InterferometerModel", create: () => new InterferometerModel() },
+  { name: "ChirpModel", create: () => new ChirpModel() },
+]);
+
+describe("composed TimeModel disposal", () => {
+  it("screen models dispose their owned timer", () => {
+    {
+      const model = new WavesModel();
+      const spy = vi.spyOn(model.timer, "dispose");
+      model.dispose();
+      expect(spy).toHaveBeenCalledOnce();
+    }
+    {
+      const model = new InterferometerModel();
+      const spy = vi.spyOn(model.timer, "dispose");
+      model.dispose();
+      expect(spy).toHaveBeenCalledOnce();
+    }
+    {
+      const model = new ChirpModel();
+      const spy = vi.spyOn(model.timer, "dispose");
+      model.dispose();
+      expect(spy).toHaveBeenCalledOnce();
+    }
+  });
+});

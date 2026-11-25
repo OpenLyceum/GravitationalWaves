@@ -1,21 +1,37 @@
 {
-  "title": "SceneryStack Template",
+  "title": "Gravitational Waves",
   "screens": {
-    "sim": "Sim"
+    "waves": "Waves",
+    "interferometer": "Interferometer",
+    "chirp": "Chirp"
   },
   "a11y": {
-    "screenSummary": {
-      "playArea": "The play area shows the main simulation content.",
-      "controlArea": "The control area has a Reset All button that returns the simulation to its starting state.",
-      "interactionHint": "Explore the simulation by interacting with its controls."
+    "waves": {
+      "screenSummary": {
+        "playArea": "The play area shows the main simulation content.",
+        "controlArea": "The control area has a Reset All button that returns the simulation to its starting state.",
+        "interactionHint": "Explore the simulation by interacting with its controls."
+      },
+      "currentDetails": "The simulation is in its initial state."
     },
-    "currentDetails": "The simulation is in its initial state.",
-    "controls": {
-      "exampleControl": "Example control"
+    "interferometer": {
+      "screenSummary": {
+        "playArea": "The play area shows the main simulation content.",
+        "controlArea": "The control area has a Reset All button that returns the simulation to its starting state.",
+        "interactionHint": "Explore the simulation by interacting with its controls."
+      },
+      "currentDetails": "The simulation is in its initial state."
+    },
+    "chirp": {
+      "screenSummary": {
+        "playArea": "The play area shows the main simulation content.",
+        "controlArea": "The control area has a Reset All button that returns the simulation to its starting state.",
+        "interactionHint": "Explore the simulation by interacting with its controls."
+      },
+      "currentDetails": "The simulation is in its initial state."
     }
   },
   "preferences": {
-    "title": "Simulation",
-    "exampleToggle": "Example Toggle"
+    "title": "Simulation"
   }
 }

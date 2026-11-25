@@ -1,5 +1,5 @@
 /**
- * SimModel.ts
+ * InterferometerModel.ts
  *
  * The top-level model for the simulation screen.
  *
@@ -21,13 +21,17 @@
  * Property declared here.
  */
 import type { TModel } from "scenerystack/joist";
+import { TimeModel } from "../../common/TimeModel.js";
 
-export class SimModel implements TModel {
+export class InterferometerModel implements TModel {
+  public readonly timer = new TimeModel();
+
   /**
    * Resets all model state to initial values.
    * Called when the user presses the Reset All button.
    */
   public reset(): void {
+    this.timer.reset();
     // TODO: call .reset() on every Property declared in this model
   }
 
@@ -35,9 +39,15 @@ export class SimModel implements TModel {
    * Steps the model forward by dt seconds.
    * Called every animation frame by the Sim framework.
    *
-   * @param _dt - elapsed time in seconds since the last frame
+   * @param dt - elapsed time in seconds since the last frame
    */
-  public step(_dt: number): void {
+  public step(dt: number): void {
+    this.timer.step(dt);
     // TODO: advance simulation state here
+  }
+
+  /** Release owned Properties / composed models. */
+  public dispose(): void {
+    this.timer.dispose();
   }
 }
