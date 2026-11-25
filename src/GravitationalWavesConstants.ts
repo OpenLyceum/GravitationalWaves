@@ -244,6 +244,38 @@ export const CHIRP_AUDIO_PITCH_FACTOR = 2;
 /** Fade in/out for chirp audio playback (seconds of audio time). */
 export const CHIRP_AUDIO_FADE_S = 0.02;
 
+// ── Network screen ────────────────────────────────────────────────────────────
+
+/** Network SNR range for a custom source. */
+export const NETWORK_SNR_RANGE = new Range(5, 50);
+
+/** Default network SNR. */
+export const NETWORK_SNR_DEFAULT = 20;
+
+/** Default custom source position (longitude, latitude in degrees, Earth-fixed). */
+export const NETWORK_SOURCE_LON_DEFAULT = 40;
+export const NETWORK_SOURCE_LAT_DEFAULT = 20;
+
+/** Default PRNG seed for timing and SNR measurement noise. */
+export const NETWORK_NOISE_SEED_DEFAULT = 3;
+
+/** Custom-source masses for the arrival traces (M☉). */
+export const NETWORK_TRACE_M1 = 36;
+export const NETWORK_TRACE_M2 = 29;
+
+/** Arrival-trace window relative to the geocentre merger time (s). */
+export const NETWORK_TRACE_START_S = -0.06;
+export const NETWORK_TRACE_END_S = 0.035;
+
+/** Arrival-trace sample rate (Hz). */
+export const NETWORK_TRACE_SAMPLE_RATE = 8192;
+
+/** Slow motion for the arrival playback: sim seconds per second of real signal time. */
+export const NETWORK_SLOW_MOTION = 50;
+
+/** Apparent area of the full Moon (deg²) for the area comparison. */
+export const FULL_MOON_DEG2 = 0.2;
+
 GravitationalWavesNamespace.register("GravitationalWavesConstants", {
   SCREEN_VIEW_MARGIN,
   PANEL_CORNER_RADIUS,

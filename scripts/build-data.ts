@@ -14,6 +14,7 @@ registerHooks({
 });
 
 const { buildEvent } = await import("./data/buildEvent.js");
+const { buildCoastlines } = await import("./data/coastlines.js");
 const { interpolate, logGrid } = await import("./data/dsp.js");
 const { numberArray, writeGeneratedModule } = await import("./data/emit.js");
 
@@ -125,6 +126,16 @@ async function build(): Promise<void> {
       throw new Error(`${event.spec.id} is ${size} bytes (limit ${EVENT_LIMIT_BYTES})`);
     }
   }
+
+  const coastlines = await buildCoastlines();
+  writeGeneratedModule(
+    `${GENERATED}/coastlines.ts`,
+    "Natural Earth 1:110m coastlines (public domain), thinned; [lon, lat, …] in tenths of a degree.",
+    `export const COASTLINES: readonly (readonly number[])[] = [\n${coastlines
+      .map((line) => `  ${numberArray(line)},`)
+      .join("\n")}\n];`,
+  );
+  console.log(`coastlines: ${coastlines.length} lines, ${coastlines.reduce((a, l) => a + l.length / 2, 0)} points`);
 
   const generatedFiles = readdirSync(GENERATED).filter((file) => file.endsWith(".ts"));
   console.log(`generated root files: ${generatedFiles.join(", ")}`);

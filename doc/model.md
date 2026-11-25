@@ -16,6 +16,8 @@ direction of travel. The sim follows a detection from end to end:
 3. **Chirp** — what an inspiralling binary emits, how the masses and distance set the
    chirp, and how matched filtering finds a signal hidden in noise. Five real
    detections from GWOSC can be compared with the model.
+4. **Network** — how several detectors locate the source on the sky from the
+   differences in arrival time and response.
 
 Learning goals. Students will be able to:
 
@@ -24,6 +26,7 @@ Learning goals. Students will be able to:
 3. Identify the main noise sources and the frequency band where ground detectors are most sensitive.
 4. Relate a binary's masses and distance to the chirp (frequency sweep, time in band, amplitude).
 5. Explain how matched filtering recovers a signal buried in noise, and interpret the signal-to-noise ratio (SNR).
+6. Explain how arrival-time differences across a detector network locate a source, why two detectors give a ring and more detectors shrink it, and how detector orientation (blind spots) matters.
 
 ## Constants
 
@@ -268,6 +271,119 @@ band-passed strain.
 | Distance | \(D\) | Mpc | 10 – 5000 (log) |
 | Template masses | \(m_1', m_2'\) | \(M_\odot\) | same as above |
 
+## Screen 4 — Network
+
+One detector hears a gravitational wave from almost every direction, so it cannot tell
+where the wave came from. A network locates the source by **triangulation**: the wave
+travels at the speed of light, so it reaches the sites at slightly different times.
+
+### Sites
+
+Positions and arm directions from LALSuite (`LALDetectors.h`) on a spherical Earth
+(\(R = 6371\) km; elevation and flattening ignored). Azimuths are clockwise from north.
+
+| Detector | Latitude | Longitude | x-arm, y-arm azimuth |
+|---|---|---|---|
+| LIGO Hanford (H1) | 46.455° N | 119.408° W | 324.0°, 234.0° |
+| LIGO Livingston (L1) | 30.563° N | 90.774° W | 252.3°, 162.3° |
+| Virgo (V1) | 43.632° N | 10.505° E | 19.4°, 289.4° |
+| KAGRA (K1) | 36.412° N | 137.306° E | 60.4°, 150.4° |
+
+### Arrival times
+
+A source in the direction \(\hat n\) is shown as the point on Earth directly beneath it
+(Earth-fixed longitude and latitude). A detector at \(\vec r_i\) receives the wave at
+
+\[
+t_i = t_\oplus - \frac{\vec r_i\cdot\hat n}{c},
+\]
+
+relative to the time \(t_\oplus\) at the Earth's centre. A pair of detectors measures
+\(\Delta t_{ij} = t_i - t_j = -(\vec r_i - \vec r_j)\cdot\hat n / c\); it can be at most the
+light-travel time between the sites (10.0 ms for Hanford–Livingston, 27 ms for
+Hanford–Virgo). All directions with the same \(\Delta t_{ij}\) form a **ring** on the sky
+around the line joining the two sites. Two detectors give a ring, three give two small
+patches (mirror images through the plane of the three sites), four give one.
+
+### Antenna response
+
+Each detector has tensor \(D = \tfrac12(\hat x\hat x^{\mathsf T} - \hat y\hat y^{\mathsf T})\)
+built from its arm directions. With wave-frame axes \(\hat a, \hat b\) (local east and north
+at the sub-source point, rotated by \(\psi\)),
+\(e_+ = \hat a\hat a^{\mathsf T} - \hat b\hat b^{\mathsf T}\),
+\(e_\times = \hat a\hat b^{\mathsf T} + \hat b\hat a^{\mathsf T}\), and
+\(F_{+,\times} = D : e_{+,\times}\). (Overhead and aligned with the arms this reduces to the
+Interferometer screen's \(F_+ = 1\).)
+
+The screen assumes a **face-on** binary, which is circularly polarized
+(\(h_+ = A\cos\Phi,\ h_\times = A\sin\Phi\)). Then each detector records
+
+\[
+h_i(t) = R_i\,A(t - t_i)\cos\big(\Phi(t - t_i) - \varphi_i\big),\qquad
+R_i = \sqrt{F_+^2 + F_\times^2},\quad \varphi_i = \operatorname{atan2}(F_\times, F_+),
+\]
+
+independent of \(\psi\). \(R_i\) (between 0 and 1) is the "response" readout. Hanford and
+Livingston are nearly aligned but rotated by about 90°, so they record nearly inverted
+copies of the same signal.
+
+### Signal-to-noise ratio and timing error
+
+For a custom source every detector has the same sensitivity, and the network SNR
+\(\rho_\text{net}\) (slider) is shared in proportion to the responses:
+\(\rho_i = \rho_\text{net}\,R_i/\sqrt{\sum_j R_j^2}\). A detector times the signal to
+
+\[
+\sigma_{t,i} = \frac{1}{2\pi\,\sigma_f\,\rho_i},\qquad \sigma_f = 100\ \text{Hz}
+\]
+
+(effective bandwidth; Fairhurst 2009). At \(\rho = 10\), \(\sigma_t \approx 0.16\) ms. With
+"measurement noise" on, the observed times get Gaussian errors of size \(\sigma_{t,i}\) and
+the observed SNRs unit Gaussian errors (fixed seed; "New noise" redraws).
+
+### Sky map
+
+For every cell of a 1° grid (longitude \(\lambda\), latitude \(\beta\)) the posterior is
+
+\[
+\ln P(\hat n) = -\tfrac12\left[\sum_i \frac{\big(t_i^\text{obs} - t_i(\hat n) - \bar t\big)^2}{\sigma_{t,i}^2}
++ \sum_i \big(\rho_i^\text{obs} - \hat A\,s_i R_i(\hat n)\big)^2\right],
+\]
+
+where \(\bar t\) (the unknown geocentre time) and \(\hat A\) (the unknown amplitude) are fitted
+at each cell by least squares and \(s_i\) is the detector's relative sensitivity. The
+first term is triangulation; the second asks whether the SNRs are consistent with the
+responses (a quiet detector rules out directions it is sensitive to). The prior is
+uniform on the sky. One detector alone constrains nothing (flat map).
+
+The **90 % credible area** is the smallest set of cells holding 90 % of the probability
+(cell area \(\cos\beta\) deg²). For comparison the full Moon is about 0.2 deg² and the
+whole sky 41 253 deg².
+
+### Presets
+
+| Event | Detectors | SNRs (H1, L1, V1) | Sky position | Model / published 90 % area |
+|---|---|---|---|---|
+| GW150914 | H1, L1 | 17, 17 (equal split) | not known — ring from the measured delay | ≈ 200 / 182 deg² (GWTC-1) |
+| GW170814 | H1, L1, V1 | 7.3, 13.7, 4.4 | RA 3h11m, Dec −44.95° (centre of the region) | ≈ 50 / 60 deg² |
+| GW170817 | H1, L1, V1 | 18.8, 26.4, 2.0 | NGC 4993, RA 13h09m48s, Dec −23.38° | ≈ 30 / 28 deg² |
+
+Per-detector SNRs are from the discovery papers (PRL 119, 141101 and 161101). For August
+2017 the relative sensitivities are the BNS ranges divided by L1's
+(H1 60, L1 100, V1 27 Mpc → 0.6, 1, 0.27). RA is converted to Earth-fixed longitude with
+Greenwich mean sidereal time at the event's GPS time. The model reproduces the
+published delays: for GW170814 H1 is 8.4 ms and V1 13.8 ms after L1 (published ≈ 8 and
+14 ms); for GW170817 Virgo is 22 ms ahead of L1, and Virgo's response there is only 0.30
+(H1 0.89, L1 0.75) — its SNR of 2 is what squeezed the region to tens of square degrees.
+
+**GW150914 measured delay.** Cross-correlating the bundled whitened H1 and L1 strain
+(last 0.35 s before merger) peaks at a lag of 7.3 ms with a negative coefficient: H1
+recorded an inverted copy 7.3 ms after L1 (published 6.9 ms, +0.5/−0.4). The test
+`tests/networkModel.test.ts` re-measures it. The same method gives 7.8 ms for GW170814;
+it is unreliable for the long, quiet GW170817 inspiral in a 0.35 s window.
+
+Coastlines: Natural Earth 1:110m (public domain), thinned by `npm run build-data`.
+
 ## Real-event presets (data provenance)
 
 Strain data from the Gravitational Wave Open Science Center (GWOSC,
@@ -304,4 +420,8 @@ duration), not amplitude.
 - Optimal orientation for the Chirp screen; the antenna pattern appears only on the
   Interferometer screen.
 - Whitened time series use a slowly-varying-frequency approximation.
-- One detector at a time; no sky localization (possible future Network screen).
+- Chirp screen: one detector at a time.
+- Network screen: face-on (circularly polarized) source; timing-and-amplitude posterior
+  instead of a full coherent Bayesian analysis; uniform sky prior (no distance prior, so
+  directions the network hears poorly are not penalized); spherical Earth; the Earth's
+  rotation during the signal is ignored.

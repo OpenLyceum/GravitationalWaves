@@ -94,6 +94,8 @@ export type WaveformParams = {
 export type Waveform = {
   readonly t: Float64Array;
   readonly h: Float64Array;
+  /** Quadrature (90° phase-shifted) strain, A sin Φ: the × polarization of a face-on source. */
+  readonly hQuadrature: Float64Array;
   readonly f: Float64Array;
   readonly mergerIndex: number;
 };
@@ -113,6 +115,7 @@ export function generateWaveform(params: WaveformParams): Waveform {
   const n = nearestInt((duration + 0.1) * sampleRate);
   const t = new Float64Array(n);
   const h = new Float64Array(n);
+  const hq = new Float64Array(n);
   const fArr = new Float64Array(n);
   const mergerIndex = Math.min(nearestInt(duration * sampleRate), n - 1);
 
@@ -140,13 +143,15 @@ export function generateWaveform(params: WaveformParams): Waveform {
       // Inspiral: Newtonian τ = τ_ISCO − t  (≥ τ_ISCO).
       const tau = tauIsco - ti;
       fArr[i] = gwFrequency(tau, mc);
-      h[i] = amplitude(tau, mc, distanceMpc) * Math.cos(gwPhase(tau, mc));
+      const a = amplitude(tau, mc, distanceMpc);
+      const phase = gwPhase(tau, mc);
+      h[i] = a * Math.cos(phase);
+      hq[i] = a * Math.sin(phase);
       continue;
     }
 
     if (!includeRingdown) {
       fArr[i] = 0;
-      h[i] = 0;
       continue;
     }
 
@@ -154,9 +159,11 @@ export function generateWaveform(params: WaveformParams): Waveform {
     const dt = ti - prevPostMergerT;
     ringPhase += 2 * Math.PI * freq * dt;
     fArr[i] = freq;
-    h[i] = ampIsco * Math.exp(-ti / tauRing) * Math.cos(ringPhase);
+    const ringAmplitude = ampIsco * Math.exp(-ti / tauRing);
+    h[i] = ringAmplitude * Math.cos(ringPhase);
+    hq[i] = ringAmplitude * Math.sin(ringPhase);
     prevPostMergerT = ti;
   }
 
-  return { t, h, f: fArr, mergerIndex };
+  return { t, h, hQuadrature: hq, f: fArr, mergerIndex };
 }

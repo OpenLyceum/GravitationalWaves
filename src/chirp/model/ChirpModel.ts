@@ -46,6 +46,7 @@ export type ChirpSourceId = "custom" | string;
 const EMPTY_WAVEFORM: Waveform = {
   t: new Float64Array(0),
   h: new Float64Array(0),
+  hQuadrature: new Float64Array(0),
   f: new Float64Array(0),
   mergerIndex: 0,
 };
@@ -374,7 +375,7 @@ export class ChirpModel implements TModel {
       duration,
     });
     const hOriented = this.applyOrientation(raw.h);
-    const waveform: Waveform = { t: raw.t, h: hOriented, f: raw.f, mergerIndex: raw.mergerIndex };
+    const waveform: Waveform = { ...raw, h: hOriented, hQuadrature: this.applyOrientation(raw.hQuadrature) };
 
     const whitened = whitenedSignal(waveform.h, waveform.f, chirpToyAsd, CHIRP_SAMPLE_RATE, fRing);
     const noise = whiteNoise(whitened.length, this.noiseSeedProperty.value >>> 0);
