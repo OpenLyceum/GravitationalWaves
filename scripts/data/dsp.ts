@@ -6,7 +6,7 @@
  */
 
 /** In-place radix-2 Cooley–Tukey FFT. `re`/`im` length must be a power of two. */
-export function fft(re: Float64Array, im: Float64Array, inverse = false): void {
+function fft(re: Float64Array, im: Float64Array, inverse = false): void {
   const n = re.length;
   if (n !== im.length || (n & (n - 1)) !== 0) {
     throw new Error(`FFT length must be a power of two (got ${n})`);
@@ -72,7 +72,7 @@ function hann(n: number): Float64Array {
 }
 
 /** Tukey window (cosine-tapered) with shape parameter α ∈ [0, 1]. */
-export function tukey(n: number, alpha: number): Float64Array {
+function tukey(n: number, alpha: number): Float64Array {
   const w = new Float64Array(n);
   const edge = Math.floor((alpha * (n - 1)) / 2);
   for (let i = 0; i < n; i++) {

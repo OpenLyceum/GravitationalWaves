@@ -33,7 +33,7 @@ const POST_MERGER_WIDE = 0.2;
 const BAND_HIGH_HZ = 350;
 
 /** Parse GPS start time from a GWOSC filename …-START-DURATION.txt.gz */
-export function parseStartGps(url: string): number {
+function parseStartGps(url: string): number {
   const match = /R1-(\d+)-\d+\.txt\.gz$/.exec(url);
   if (!match) {
     throw new Error(`Cannot parse start GPS from ${url}`);
@@ -42,12 +42,12 @@ export function parseStartGps(url: string): number {
 }
 
 /** L1 URL is the H1 URL with H-H1_ → L-L1_. */
-export function l1UrlFromH1(h1Url: string): string {
+function l1UrlFromH1(h1Url: string): string {
   return h1Url.replace("H-H1_", "L-L1_");
 }
 
 /** Gunzip and parse a GWOSC plain-text strain file (one value per line after # comments). */
-export function parseStrainTxt(bytes: Buffer): Float64Array {
+function parseStrainTxt(bytes: Buffer): Float64Array {
   const text = gunzipSync(bytes).toString("utf8");
   const values: number[] = [];
   for (const line of text.split(/\r?\n/)) {

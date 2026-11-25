@@ -74,6 +74,25 @@ export function chirpNumberControlOptions(
 }
 
 /**
+ * Copy NumberDisplay options without valuePattern / decimalPlaces / numberFormatOptions, which
+ * NumberDisplay rejects alongside a numberFormatter.
+ */
+export function withoutFormatOptions(
+  options: NumberControlOptions["numberDisplayOptions"],
+): NumberControlOptions["numberDisplayOptions"] {
+  if (!options) {
+    return options;
+  }
+  const {
+    valuePattern: _valuePattern,
+    decimalPlaces: _decimalPlaces,
+    numberFormatOptions: _numberFormatOptions,
+    ...rest
+  } = options;
+  return rest;
+}
+
+/**
  * NumberControl whose slider moves in log₁₀ space while the model Property stays linear.
  * Returns the control and a dispose callback for the bridge Property.
  */
@@ -116,8 +135,10 @@ export function createLogNumberControl(
     ...base,
     delta: logRange.getLength() / 100,
     numberDisplayOptions: {
-      ...base.numberDisplayOptions,
-      numberFormatter: (logValue: number) => toFixed(10 ** logValue, decimals),
+      ...withoutFormatOptions(base.numberDisplayOptions),
+      // numberFormatter is mutually exclusive with valuePattern / decimalPlaces, so apply the pattern here.
+      numberFormatter: (logValue: number) => valuePattern.value.replace("{{value}}", toFixed(10 ** logValue, decimals)),
+      numberFormatterDependencies: [valuePattern],
     },
   };
   if (options?.accessibleName) {

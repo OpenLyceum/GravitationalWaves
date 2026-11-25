@@ -261,6 +261,12 @@ export class MichelsonNode extends Node {
       beamAlphaProperty.dispose();
       gainLabelProperty.unlink(gainListener);
       gainLabelProperty.dispose();
+      const children = this.children.slice();
+      for (const child of children) {
+        if (!child.isDisposed) {
+          child.disposeSubtree();
+        }
+      }
       deltaLColon.dispose();
       deltaPhiColon.dispose();
       fPlusColon.dispose();

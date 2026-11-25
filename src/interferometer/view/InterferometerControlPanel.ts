@@ -193,7 +193,7 @@ export class InterferometerControlPanel extends GravitationalWavesPanel {
       ],
     });
 
-    super(content, { isDisposable: false, xMargin: 10, yMargin: 8 });
+    super(content, { xMargin: 10, yMargin: 8 });
 
     this.armLengthControl = armLengthControl;
     this.fabryCheckbox = fabryCheckbox;
@@ -207,7 +207,11 @@ export class InterferometerControlPanel extends GravitationalWavesPanel {
     this.polarizationGroup = polarizationGroup;
     this.blindSpotButton = blindSpotButton;
     this.timeControl = timeControl;
-    this.disposeExtras = () => laser.dispose();
+    this.disposeExtras = () => {
+      // Panel.dispose() does not dispose content; controls link to model and strings.
+      content.disposeSubtree();
+      laser.dispose();
+    };
   }
 
   public override dispose(): void {

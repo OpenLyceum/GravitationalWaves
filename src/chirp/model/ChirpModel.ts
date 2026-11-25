@@ -91,7 +91,8 @@ export class ChirpModel implements TModel {
   public readonly optimalSnrProperty: NumberProperty;
   public readonly matchProperty: NumberProperty;
   public readonly recoveredSnrProperty: NumberProperty;
-  public readonly catalogNetworkSnrProperty: NumberProperty;
+  /** Catalog network SNR of the selected event; null for a custom source. */
+  public readonly catalogNetworkSnrProperty: Property<number | null>;
 
   public readonly waveformProperty: Property<Waveform>;
   public readonly whitenedSignalProperty: Property<Float64Array>;
@@ -141,7 +142,7 @@ export class ChirpModel implements TModel {
     this.optimalSnrProperty = new NumberProperty(0);
     this.matchProperty = new NumberProperty(0);
     this.recoveredSnrProperty = new NumberProperty(0);
-    this.catalogNetworkSnrProperty = new NumberProperty(Number.NaN);
+    this.catalogNetworkSnrProperty = new Property<number | null>(null);
 
     this.waveformProperty = new Property<Waveform>(EMPTY_WAVEFORM);
     const emptySamples: Float64Array = new Float64Array(0);
@@ -155,7 +156,8 @@ export class ChirpModel implements TModel {
 
     this.isDetectedProperty = new DerivedProperty([this.recoveredSnrProperty], (snr) => snr >= 8);
 
-    // Enforce m2 ≤ m1 (signal and template) by clamping the smaller mass.
+    // Enforce m2 ≤ m1 (signal and template). Lowering m1 below m2 pulls m2 down; raising m2 above
+    // m1 pushes m1 up. Each listener only writes the *other* Property, so there is no reentrant set.
     const onM1 = (m1: number) => {
       if (this.syncingMasses) {
         return;
@@ -173,7 +175,7 @@ export class ChirpModel implements TModel {
       }
       this.syncingMasses = true;
       if (m2 > this.m1Property.value) {
-        this.m2Property.value = this.m1Property.value;
+        this.m1Property.value = m2;
       }
       this.syncingMasses = false;
       this.markCustomIfUserEdit();
@@ -194,7 +196,7 @@ export class ChirpModel implements TModel {
       }
       this.syncingMasses = true;
       if (m2 > this.templateM1Property.value) {
-        this.templateM2Property.value = this.templateM1Property.value;
+        this.templateM1Property.value = m2;
       }
       this.syncingMasses = false;
     };
@@ -302,7 +304,7 @@ export class ChirpModel implements TModel {
     this.showFrequencyTrackProperty.reset();
     this.loadedEventProperty.value = null;
     this.eventLoadingProperty.value = false;
-    this.catalogNetworkSnrProperty.value = Number.NaN;
+    this.catalogNetworkSnrProperty.value = null;
     this.snrScanProperty.value = EMPTY_SCAN;
     this.applyingSource = false;
     this.recompute();
@@ -422,7 +424,7 @@ export class ChirpModel implements TModel {
     if (this.sourceProperty.value !== "custom") {
       this.sourceProperty.value = "custom";
       this.loadedEventProperty.value = null;
-      this.catalogNetworkSnrProperty.value = Number.NaN;
+      this.catalogNetworkSnrProperty.value = null;
     }
   }
 
@@ -431,7 +433,7 @@ export class ChirpModel implements TModel {
       this.loadGeneration += 1;
       this.eventLoadingProperty.value = false;
       this.loadedEventProperty.value = null;
-      this.catalogNetworkSnrProperty.value = Number.NaN;
+      this.catalogNetworkSnrProperty.value = null;
       return;
     }
     const event = this.catalog.find((e) => e.id === id);

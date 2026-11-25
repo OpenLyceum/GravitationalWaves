@@ -44,7 +44,15 @@ export class WavesScreenSummaryContent extends ScreenSummaryContent {
       interactionHintContent: a11y.screenSummary.interactionHintStringProperty,
     });
 
-    this.disposeSummary = () => currentDetailsProperty.dispose();
+    this.disposeSummary = () => {
+      const children = this.children.slice();
+      for (const child of children) {
+        if (!child.isDisposed) {
+          child.disposeSubtree();
+        }
+      }
+      currentDetailsProperty.dispose();
+    };
   }
 
   public override dispose(): void {

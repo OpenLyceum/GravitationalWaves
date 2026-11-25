@@ -184,7 +184,15 @@ export class SpectrogramNode extends Node {
       ],
       () => this.redraw(model),
     );
-    this.disposeNode = () => multilink.dispose();
+    this.disposeNode = () => {
+      multilink.dispose();
+      const children = this.children.slice();
+      for (const child of children) {
+        if (!child.isDisposed) {
+          child.disposeSubtree();
+        }
+      }
+    };
   }
 
   public override dispose(): void {

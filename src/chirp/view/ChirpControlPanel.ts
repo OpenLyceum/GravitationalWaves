@@ -204,6 +204,8 @@ export class ChirpControlPanel extends GravitationalWavesPanel {
     this.playChirpButton = playChirpButton;
 
     this.disposeExtras = () => {
+      // Panel.dispose() does not dispose content; ComboBox / NumberControl link to model and strings.
+      content.disposeSubtree();
       distance.dispose();
       for (const item of comboItems) {
         if (item.value !== "custom") {

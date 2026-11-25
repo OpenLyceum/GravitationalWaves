@@ -126,6 +126,8 @@ export class ChirpMatchedFilterPanel extends GravitationalWavesPanel {
     this.disposePanel = () => {
       barLink.dispose();
       scanLink.dispose();
+      // Panel.dispose() does not dispose content; NumberControl / Text link to model and strings.
+      content.disposeSubtree();
     };
   }
 

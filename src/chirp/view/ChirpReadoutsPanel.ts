@@ -62,7 +62,7 @@ export class ChirpReadoutsPanel extends GravitationalWavesPanel {
     );
     const catalogValueProperty = new DerivedProperty(
       [model.catalogNetworkSnrProperty, strings.catalogSnrStringProperty],
-      (snr, pattern) => (Number.isFinite(snr) ? StringUtils.fillIn(pattern, { value: toFixed(snr, 1) }) : ""),
+      (snr, pattern) => (snr === null ? "" : StringUtils.fillIn(pattern, { value: toFixed(snr, 1) })),
     );
 
     const grid = new GridBox({
@@ -172,13 +172,15 @@ export class ChirpReadoutsPanel extends GravitationalWavesPanel {
     });
 
     const catalogVisible = Multilink.multilink([model.catalogNetworkSnrProperty], (snr) => {
-      catalogBlock.visible = Number.isFinite(snr);
+      catalogBlock.visible = snr !== null;
     });
 
     this.disposePanel = () => {
       badgeLink.dispose();
       barLink.dispose();
       catalogVisible.dispose();
+      // Panel.dispose() does not dispose content; Text / RichText link to strings and DerivedProperties.
+      content.disposeSubtree();
       chirpMassValueProperty.dispose();
       timeInBandValueProperty.dispose();
       fIscoValueProperty.dispose();

@@ -239,6 +239,12 @@ export class SensitivityChartNode extends Node {
 
     this.disposeChart = () => {
       multilink.dispose();
+      const children = this.children.slice();
+      for (const child of children) {
+        if (!child.isDisposed) {
+          child.disposeSubtree();
+        }
+      }
       transform.dispose();
     };
   }

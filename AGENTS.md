@@ -54,6 +54,18 @@ Physics and data provenance: [`doc/model.md`](doc/model.md). Architecture: [`doc
 - Catalog (`eventCatalog.ts`) and H1 ASD overlay (`ligoAsd.ts`) are bundled; each event’s strain is a lazy Vite chunk under `generated/events/`.
 - Overlay masses are detector-frame: `detectorFrameMasses(event)` = m_source · (1+z).
 
+## Gotchas
+
+- `npm run test:fuzz` runs with assertions (`?ea`); screenshots and unit tests do not. Run it after any view change.
+  A `NumberControl` with `numberFormatter` must not also get `valuePattern` / `decimalPlaces`
+  (use `withoutFormatOptions` in `src/common/view/themedNumberControl.ts`).
+- Mass guards in `ChirpModel` write only the *other* mass Property (raising m₂ above m₁ pushes m₁ up) to avoid reentrant sets.
+- Position empty-at-construction `Path`/`Line` nodes with `x`/`y`, not `left`/`top` (empty bounds swallow the offset).
+- `match()` normalizes signal and template over their own ISCO bands; the overlap runs to the smaller ISCO.
+  Keep `tests/matchedFilter.test.ts` "full-range scan peaks at the true chirp mass" passing.
+- Model SNRs use `ORIENTATION_FACTOR = 0.4` (rms sky/orientation average); the toy noise is more sensitive than O1,
+  so model SNRs for presets run above the catalog values by design.
+
 ## Compliance carve-outs
 
 None yet.

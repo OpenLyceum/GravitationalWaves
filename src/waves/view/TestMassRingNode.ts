@@ -153,7 +153,15 @@ export class TestMassRingNode extends Node {
       grid.shape = shape;
     });
 
-    this.disposeRing = () => multilink.dispose();
+    this.disposeRing = () => {
+      multilink.dispose();
+      const children = this.children.slice();
+      for (const child of children) {
+        if (!child.isDisposed) {
+          child.disposeSubtree();
+        }
+      }
+    };
   }
 
   public override dispose(): void {

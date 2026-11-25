@@ -11,7 +11,7 @@ import { AquaRadioButtonGroup } from "scenerystack/sun";
 import { GravitationalWavesPanel } from "../../common/GravitationalWavesPanel.js";
 import { LABEL_FONT, SMALL_FONT, TITLE_FONT } from "../../common/view/GravitationalWavesFonts.js";
 import { formatComparisonFactor, formatScientific } from "../../common/view/scientificFormat.js";
-import { panelNumberControlOptions } from "../../common/view/themedNumberControl.js";
+import { panelNumberControlOptions, withoutFormatOptions } from "../../common/view/themedNumberControl.js";
 import GravitationalWavesColors from "../../GravitationalWavesColors.js";
 import {
   ATOM_SIZE_M,
@@ -37,7 +37,7 @@ export class RealScalePanel extends GravitationalWavesPanel {
       maxWidth: 200,
     });
 
-    const baseDisplay = panelNumberControlOptions(undefined, 0).numberDisplayOptions;
+    const baseDisplay = withoutFormatOptions(panelNumberControlOptions(undefined, 0).numberDisplayOptions);
     const strainControl = new NumberControl(
       strings.realStrainStringProperty,
       model.realStrainExponentProperty,
@@ -143,11 +143,13 @@ export class RealScalePanel extends GravitationalWavesPanel {
       children: [title, strainControl, baselineHeading, baselineGroup, deltaHeading, deltaValue, compare],
     });
 
-    super(content, { isDisposable: false });
+    super(content);
 
     this.strainControl = strainControl;
     this.baselineGroup = baselineGroup;
     this.disposePanel = () => {
+      // Panel.dispose() does not dispose content; NumberControl / Text link to model and strings.
+      content.disposeSubtree();
       deltaLStringProperty.dispose();
       compareStringProperty.dispose();
     };
